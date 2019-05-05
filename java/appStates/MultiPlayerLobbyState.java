@@ -19,12 +19,11 @@ import com.simsilica.lemur.style.BaseStyles;
 import controler.MultiPlLobbyStateListener;
 import Multiplayer.*;
 
-import java.io.IOException;
+import static appStates.Game.GAME;
 
 
 public class MultiPlayerLobbyState extends AbstractAppState {
 
-    private SimpleApplication app;
     private Node guiNode;
     private Node rootNode;
     private AssetManager assetManager;
@@ -45,14 +44,13 @@ public class MultiPlayerLobbyState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
 
-        super.initialize(stateManager, app);
-        this.app = (Game) appImp; // can cast Application to something more specific
-        this.rootNode = this.app.getRootNode();
-        this.guiNode = this.app.getGuiNode();
-        this.assetManager = this.app.getAssetManager();
-        this.stateManager = this.app.getStateManager();
-        this.inputManager = this.app.getInputManager();
-        this.cam = this.app.getCamera();
+        super.initialize(stateManager, GAME);
+        this.rootNode = GAME.getRootNode();
+        this.guiNode = GAME.getGuiNode();
+        this.assetManager = GAME.getAssetManager();
+        this.stateManager = GAME.getStateManager();
+        this.inputManager = GAME.getInputManager();
+        this.cam = GAME.getCamera();
         windowHeight = cam.getHeight();
         windowWidth = cam.getWidth();
         tabWidth = windowWidth/6;
@@ -88,7 +86,7 @@ public class MultiPlayerLobbyState extends AbstractAppState {
 
     private void createBackground()
     {
-        GuiGlobals.initialize(app);
+        GuiGlobals.initialize(GAME);
         BaseStyles.loadGlassStyle();
 
         // Set 'glass' as the default style when not specified

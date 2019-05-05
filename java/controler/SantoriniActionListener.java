@@ -18,7 +18,6 @@ abstract class SantoriniActionListener implements ActionListener {
     String actionName;
     boolean adequateKeyPressed;
     CollisionResult closestCursorCollision;
-    Board board;
     Player[] players;
 
     SantoriniActionListener(SantoriniState santoriniState){
@@ -26,7 +25,6 @@ abstract class SantoriniActionListener implements ActionListener {
         this.inputManager = this.santoriniState.inputManager;
         this.cam = this.santoriniState.cam;
         this.stateManager = this.santoriniState.stateManager;
-        this.board = this.santoriniState.board;
         this.players = this.santoriniState.players;
     }
 

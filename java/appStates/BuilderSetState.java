@@ -2,27 +2,24 @@ package appStates;
 
 
 import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.Node;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 import controler.BuilderSetStateListener;
 import model.Board;
 import model.Builder;
-import model.Player;
+
+import static appStates.Game.GAME;
+import static model.Board.BOARD;
 
 public class BuilderSetState extends SantoriniState {
     private BuilderSetStateListener builderSetStateListener;
@@ -35,7 +32,7 @@ public class BuilderSetState extends SantoriniState {
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
         super.initialize(stateManager, application);
-        setClassFields(application);
+        setClassFields();
         createPhantomBuilder();
         createTurnIndicator();
         initializeKeys();
@@ -62,14 +59,14 @@ public class BuilderSetState extends SantoriniState {
         inputManager.deleteMapping("selectTile");
 
         rootNode.detachChild(phantomBuilder.getBuilderModel());
-        game.getGuiNode().detachAllChildren();
-        game.inGameState = new InGameState();
-        stateManager.attach(game.inGameState);
+        GAME.getGuiNode().detachAllChildren();
+        GAME.inGameState = new InGameState();
+        stateManager.attach(GAME.inGameState);
     }
 
     @Override
-    protected void setClassFields(Application application) {
-        super.setClassFields(application);
+    protected void setClassFields() {
+        super.setClassFields();
         this.buildersCount = 0;
         this.builderSetStateListener = new BuilderSetStateListener(this);
 
@@ -95,7 +92,7 @@ public class BuilderSetState extends SantoriniState {
         textContainer.setBackground(sth);
         turnPanel = textContainer.addChild(new TextField("Turn indicator"));
         turnPanel.setColor(ColorRGBA.Orange);
-        game.getGuiNode().attachChild(textContainer);
+        GAME.getGuiNode().attachChild(textContainer);
     }
 
     private void updatePhantomBuilderPosition() {
@@ -110,8 +107,8 @@ public class BuilderSetState extends SantoriniState {
     }
 
     private boolean isTileOccupable(int column, int row) {
-        return board.collidingTile(column, row, currentTile) != null &&
-               !board.getTile(column, row).isCompleted() ;
+        return BOARD.collidingTile(column, row, currentTile) != null &&
+               !BOARD.getTile(column, row).isCompleted() ;
     }
 
     private boolean cursorPointsBoardTile() {
@@ -120,7 +117,7 @@ public class BuilderSetState extends SantoriniState {
         Vector3f click3d = cam.getWorldCoordinates(click2d, 0f).clone();
         Vector3f dir = cam.getWorldCoordinates(click2d, 1f).subtractLocal(click3d).normalizeLocal();
         Ray ray = new Ray(click3d, dir);
-        board.getBoardNode().collideWith(ray, results);
+        BOARD.getBoardNode().collideWith(ray, results);
         if (results.size() > 0) {
             currentTile = results.getClosestCollision();
             return true;

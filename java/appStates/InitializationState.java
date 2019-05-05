@@ -8,6 +8,9 @@ import model.*;
 import view.CameraControl;
 import view.Scene;
 
+import static appStates.Game.GAME;
+import static model.Board.BOARD;
+
 
 class InitializationState extends SantoriniState {
     private ViewPort viewPort;
@@ -15,24 +18,22 @@ class InitializationState extends SantoriniState {
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
         super.initialize(stateManager, application);
-        setClassFields(application);
+        setClassFields();
 
-        for (int i = 0; i < game.player.length; i++)
-            players[i] = new Player(game, "Blue");
+        for (int i = 0; i < GAME.player.length; i++)
+            players[i] = new Player("Blue");
 
         new Scene(assetManager, rootNode, viewPort);
-        new CameraControl(cam, board.boardCentre(), inputManager);
+        new CameraControl(cam, BOARD.boardCentre(), inputManager);
         moveToBuilderSetState();
     }
 
     @Override
-    protected void setClassFields(Application application){
-        super.setClassFields(application);
-        this.viewPort = this.game.getViewPort();
-        ((Game) application).board = new Board((Game) application);
-        this.board = ((Game) application).board;
-        ((Game) application).player = new Player[((Game) application).getPlayerNumber()];
-        this.players = ((Game)application).player;
+    protected void setClassFields(){
+        super.setClassFields();
+        this.viewPort = GAME.getViewPort();
+        GAME.player = new Player[GAME.getPlayerNumber()];
+        this.players = GAME.player;
     }
 
     @Override
@@ -40,6 +41,6 @@ class InitializationState extends SantoriniState {
 
     }
 
-    private void moveToBuilderSetState(){ stateManager.attach(game.builderSetState); }
+    private void moveToBuilderSetState(){ stateManager.attach(GAME.builderSetState); }
 
 }

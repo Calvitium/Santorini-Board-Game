@@ -13,6 +13,8 @@ import com.simsilica.lemur.component.QuadBackgroundComponent;
 import controler.InGameStateListener;
 import model.Builder;
 
+import static appStates.Game.GAME;
+
 public class InGameState extends SantoriniState {
     private Builder selectedBuilder; //a builder, who was chosen by a players to make his turn
     public static int active; // players[active] is the one whose turn is currently considered
@@ -26,14 +28,14 @@ public class InGameState extends SantoriniState {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        setClassFields(app);
+        setClassFields();
         setTurnPanel();
         initializeKeys();
     }
 
     @Override
-    protected void setClassFields(Application application){
-        super.setClassFields(application);
+    protected void setClassFields(){
+        super.setClassFields();
         actionListener = new InGameStateListener(this);
         active = 0;
         roundPhase = SELECTION_PHASE;
@@ -78,7 +80,7 @@ public class InGameState extends SantoriniState {
         turnPanel.setColor(ColorRGBA.Orange);
         turnPanel.setText("Player " + (active +1)+ "'s turn.");
         turnPanel.setSingleLine(false);
-        game.getGuiNode().attachChild(textContainer);
+        GAME.getGuiNode().attachChild(textContainer);
     }
 
 }

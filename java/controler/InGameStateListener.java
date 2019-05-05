@@ -15,6 +15,7 @@ import static appStates.InGameState.MOVEMENT_PHASE;
 import static appStates.InGameState.SELECTION_PHASE;
 import static appStates.InGameState.active;
 import static appStates.InGameState.roundPhase;
+import static model.Board.BOARD;
 
 public class InGameStateListener extends SantoriniActionListener {
 
@@ -43,14 +44,14 @@ public class InGameStateListener extends SantoriniActionListener {
             cancelSelectedBuilder();
 
         else if (isMovingBuilderPossible()) {
-            players[active].moveBuilder(board, cursorRay, results, selectedBuilder);
+            players[active].moveBuilder(cursorRay, results, selectedBuilder);
             if (selectedBuilder.hasMoved()) {
                 checkWinCondition();
                 goToBuildingPhase();
             }
         }
         else if (isBuildingPossible()) {
-            players[active].orderBuild(board, cursorRay, results, selectedBuilder);
+            players[active].orderBuild( cursorRay, results, selectedBuilder);
             if (selectedBuilder.hasBuilt())
                 endPlayersTurn();
         }
@@ -77,7 +78,7 @@ public class InGameStateListener extends SantoriniActionListener {
         inputManager.deleteMapping("moveBuilder");
         addFunctionality("buildPhase", MouseInput.BUTTON_LEFT);
         roundPhase = BUILDING_PHASE;
-        board.showAvailableTiles(selectedBuilder, showTilesMode.showTiles);
+        BOARD.showAvailableTiles(selectedBuilder, showTilesMode.showTiles);
 
     }
 
@@ -93,7 +94,7 @@ public class InGameStateListener extends SantoriniActionListener {
     }
 
     private void cancelSelectedBuilder() {
-        board.showAvailableTiles(selectedBuilder, showTilesMode.hideTiles); //hide available tiles
+        BOARD.showAvailableTiles(selectedBuilder, showTilesMode.hideTiles); //hide available tiles
         selectedBuilder = null; // builder is canceled
         inputManager.deleteMapping("moveBuilder");
         roundPhase = SELECTION_PHASE;
@@ -106,14 +107,14 @@ public class InGameStateListener extends SantoriniActionListener {
     private void selectBuilderToMove() {
         roundPhase = MOVEMENT_PHASE;
         selectedBuilder = players[active].collidingBuilder(closestCursorCollision);
-        board.showAvailableTiles(selectedBuilder, showTilesMode.showTiles);
+        BOARD.showAvailableTiles(selectedBuilder, showTilesMode.showTiles);
 
         if (!inputManager.hasMapping("moveBuilder"))
             addFunctionality("moveBuilder", MouseInput.BUTTON_LEFT);
     }
 
     private void removeTilesAvailableForPreviousBuilder() {
-        board.showAvailableTiles(selectedBuilder, showTilesMode.hideTiles);
+        BOARD.showAvailableTiles(selectedBuilder, showTilesMode.hideTiles);
     }
 
     private boolean playerSwitchesBetweenBuilders() {

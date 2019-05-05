@@ -1,6 +1,5 @@
 package model;
 
-import appStates.Game;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.light.AmbientLight;
@@ -13,26 +12,30 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
 
+import static appStates.Game.GAME;
 import static appStates.InGameState.*;
 
 public final class Board {
+
+    public static final Board BOARD = new Board();
+
     private AssetManager assetManager;
-    private Node tilesNode;             // every single board tile is attached to it
-    private Node boardNode;             // includes tilesNode and board frame
+    private Node tilesNode;             // every single BOARD tile is attached to it
+    private Node boardNode;             // includes tilesNode and BOARD frame
     private BoardTile tiles[][];
 
-    public Board(Game game) {
+    private Board() {
         // 1. preliminary initialization
         this.tilesNode = new Node("Tiles");
         this.boardNode = new Node("Board");
         this.tiles = new BoardTile[5][5];
-        this.assetManager = game.getAssetManager();
-        // 2. loading board frame model
+        this.assetManager = GAME.getAssetManager();
+        // 2. loading BOARD frame model
         Spatial boardFrame = assetManager.loadModel("Models/Board/Board.j3o");
         boardFrame.setLocalTranslation(-21.5f, 0.1f, -1.5f);
         boardFrame.setLocalScale(20.0f);
         boardNode.attachChild(boardFrame);
-        // 3. loading board tiles
+        // 3. loading BOARD tiles
         for(byte column = 0; column<5; column++)
             for(byte row = 0; row<5; row++)
             {
@@ -40,9 +43,9 @@ public final class Board {
                 tilesNode.attachChild(tiles[column][row].tileNode);
             }
         boardNode.attachChild(tilesNode);
-        // 4. final attachment of the clear board to the world
+        // 4. final attachment of the clear BOARD to the world
         highlightBoard();
-        attachBoard(game.getRootNode());
+        attachBoard(GAME.getRootNode());
     }
 
     private void highlightBoard() {
@@ -55,7 +58,7 @@ public final class Board {
         node.attachChild(boardNode);
     }
 
-/** Returns a board tile that a mouse cursor collides with OR returns null if the click missed the board */
+/** Returns a BOARD tile that a mouse cursor collides with OR returns null if the click missed the BOARD */
     public BoardTile collidingTile(int column, int row, CollisionResult collisionResult) {
     Node n = collisionResult.getGeometry().getParent();
     while(n.getParent() != null)
@@ -67,7 +70,7 @@ public final class Board {
     return null;
 }
 
-/** Returns a board tile which location is defined by "column" and "row" indexes in a 5x5 matrix */
+/** Returns a BOARD tile which location is defined by "column" and "row" indexes in a 5x5 matrix */
     public BoardTile getTile(int column, int row) {
     return tiles[column][row]; }
 
@@ -75,7 +78,7 @@ public final class Board {
     public Node getBoardNode() {
     return tilesNode; }
 
-/** Returns a tile (a Spatial) in the exact middle of the board */
+/** Returns a tile (a Spatial) in the exact middle of the BOARD */
     public Spatial boardCentre() {return tiles[2][2].tile;}
 
 /** Builds up a tile that was selected by a players during the building phase */
@@ -137,7 +140,7 @@ public final class Board {
 
 
 
- /* This is an inner class describing each board tile from 25 tiles */
+ /* This is an inner class describing each BOARD tile from 25 tiles */
      public class BoardTile extends CollisionResult {
 
     /** Basic info about a tile */

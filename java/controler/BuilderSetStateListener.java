@@ -1,12 +1,13 @@
 package controler;
 
 import appStates.BuilderSetState;
-import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import model.Player;
+
+import static model.Board.BOARD;
 
 public class BuilderSetStateListener extends SantoriniActionListener {
 
@@ -66,7 +67,7 @@ public class BuilderSetStateListener extends SantoriniActionListener {
         Vector3f click3d = cam.getWorldCoordinates(click2d, 0f).clone();
         Vector3f dir = cam.getWorldCoordinates(click2d, 1f).subtractLocal(click3d).normalizeLocal();
         Ray ray = new Ray(click3d, dir);
-        board.getBoardNode().collideWith(ray, results);
+        BOARD.getBoardNode().collideWith(ray, results);
         if (results.size() > 0) {
             closestCursorCollision = results.getClosestCollision();
             return true;
@@ -78,9 +79,9 @@ public class BuilderSetStateListener extends SantoriniActionListener {
     }
 
     private boolean isTileOccupable(int column, int row) {
-        return board.collidingTile(column, row, closestCursorCollision) != null &&
-                board.getTile(column, row).isBuildable() &&
-                board.getTile(column, row).isBuildable() &&
-                !board.getTile(column, row).isCompleted();
+        return BOARD.collidingTile(column, row, closestCursorCollision) != null &&
+                BOARD.getTile(column, row).isBuildable() &&
+                BOARD.getTile(column, row).isBuildable() &&
+                !BOARD.getTile(column, row).isCompleted();
     }
 }

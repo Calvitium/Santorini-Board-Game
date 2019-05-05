@@ -59,7 +59,7 @@ public class Builder {
 
     }
 
-/** Sets builder's board coordinates */
+/** Sets builder's BOARD coordinates */
     public void setCoordinates(int column, int row) {
         tileRow = row;
         tileColumn =  column;
@@ -83,7 +83,7 @@ public class Builder {
         adjacentTiles.clear();
     }
 
-/** Returns true if a builder was set on the board OR false otherwise*/
+/** Returns true if a builder was set on the BOARD OR false otherwise*/
     boolean isSet() { return set; }
 
 /** Returns a node which the builder is directly attached to  */

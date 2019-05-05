@@ -17,10 +17,11 @@ import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 import com.simsilica.lemur.style.BaseStyles;
 
+import static appStates.Game.GAME;
+
 
 public class MenuState extends AbstractAppState {
 
-    private SimpleApplication app;
     private Node guiNode;
     private Node rootNode;
     private AssetManager assetManager;
@@ -38,14 +39,13 @@ public class MenuState extends AbstractAppState {
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
 
-        super.initialize(stateManager, app);
-        this.app = (Game) appImp; // can cast Application to something more specific
-        this.rootNode = this.app.getRootNode();
-        this.guiNode = this.app.getGuiNode();
-        this.assetManager = this.app.getAssetManager();
-        this.stateManager = this.app.getStateManager();
-        this.inputManager = this.app.getInputManager();
-        this.cam = this.app.getCamera();
+        super.initialize(stateManager, GAME);
+        this.rootNode = GAME.getRootNode();
+        this.guiNode = GAME.getGuiNode();
+        this.assetManager = GAME.getAssetManager();
+        this.stateManager = GAME.getStateManager();
+        this.inputManager = GAME.getInputManager();
+        this.cam = GAME.getCamera();
 
         windowHeight = cam.getHeight();
         windowWidth = cam.getWidth();
@@ -67,7 +67,7 @@ public class MenuState extends AbstractAppState {
     }
     private void createBackground()
     {
-        GuiGlobals.initialize(app);
+        GuiGlobals.initialize(GAME);
         BaseStyles.loadGlassStyle();
 
         // Set 'glass' as the default style when not specified
@@ -108,7 +108,7 @@ public class MenuState extends AbstractAppState {
                 stateManager.cleanup();
                 guiNode.attachChild(myWindow);
                 stateManager.attach(new MultiPlayerLobbyState());
-                stateManager.detach(((Game) app).menuState);
+                stateManager.detach(((Game) GAME).menuState);
             }
         });
     }
@@ -135,10 +135,10 @@ public class MenuState extends AbstractAppState {
         newButton.addClickCommands(new Command<Button>() {
             @Override
             public void execute(Button source) {
-                ((Game) app).setPlayerNumber(numberOfPlayers);
+                ((Game) GAME).setPlayerNumber(numberOfPlayers);
                 stateManager.cleanup();
-                stateManager.attach(((Game) app).initializationState);
-                stateManager.detach(((Game) app).menuState);
+                stateManager.attach(((Game) GAME).initializationState);
+                stateManager.detach(((Game) GAME).menuState);
 
             }
         });

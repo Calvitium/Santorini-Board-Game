@@ -10,7 +10,7 @@ import model.Floor;
 import model.Player;
 
 public interface PlayerCreator {
-    default void createPlayers(Game app, Board board) {
+    default void createPlayers(Game app, Board BOARD) {
         String playerColor;
         for(int i=0; i<((Game)app).players.length;i++) {
             if(i == 0)
@@ -33,9 +33,9 @@ public interface PlayerCreator {
 
                         int previousHeight = 0;
                         @Override
-                        public void move(Board board, Ray ray, CollisionResults results, Builder selected) {
+                        public void move(Board BOARD, Ray ray, CollisionResults results, Builder selected) {
                             previousHeight = selected.getFloorLvl().height;
-                            super.move(board, ray, results, selected);
+                            super.move(BOARD, ray, results, selected);
 
                         }
                         @Override
@@ -62,7 +62,7 @@ public interface PlayerCreator {
                             {
                                 for(int j =0;j<5;j++)
                                 {
-                                    if(board.getTile(i,j).getHeight().height==4)
+                                    if(BOARD.getTile(i,j).getHeight().height==4)
                                         towersCount++;
                                 }
                             }
@@ -77,9 +77,9 @@ public interface PlayerCreator {
                     ((Game) app).players[i] = new Player(((Game) app), playerColor) {
                         boolean afterFirstMove = false;
                         @Override
-                        public void move(Board board, Ray ray, CollisionResults results, Builder selected) {
+                        public void move(Board BOARD, Ray ray, CollisionResults results, Builder selected) {
 
-                            super.move(board, ray, results, selected);
+                            super.move(BOARD, ray, results, selected);
                             if(!afterFirstMove) {
                                 afterFirstMove =true;
                                 selected.setMoved(false);
@@ -97,10 +97,10 @@ public interface PlayerCreator {
                     ((Game) app).players[i] = new Player(((Game) app), playerColor) {
 
                         @Override
-                        public Vector2f build(Board board, Ray ray, CollisionResults results, Builder selected) {
+                        public Vector2f build(Board BOARD, Ray ray, CollisionResults results, Builder selected) {
 
-                            Vector2f previousTarget = super.build(board, ray, results, selected);
-                            board.buildTile((int)previousTarget.x,(int)previousTarget.y);
+                            Vector2f previousTarget = super.build(BOARD, ray, results, selected);
+                            BOARD.buildTile((int)previousTarget.x,(int)previousTarget.y);
                             return null;
                         }
 
