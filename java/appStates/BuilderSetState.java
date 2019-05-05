@@ -22,12 +22,12 @@ import static appStates.Game.GAME;
 import static model.Board.BOARD;
 
 public class BuilderSetState extends SantoriniState {
+
     private BuilderSetStateListener builderSetStateListener;
     private TextField turnPanel;
     private Builder phantomBuilder;
     public int buildersCount;
     private CollisionResult currentTile;
-
 
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
