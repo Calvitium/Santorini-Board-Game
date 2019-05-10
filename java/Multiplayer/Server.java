@@ -1,56 +1,73 @@
 package Multiplayer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.text.DateFormat;
-import java.util.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.LinkedList;
 
 public class Server {
-    public ServerSocket serverSocket;
+    private ServerSocket serverSocket;
+    private int playerLimit;
+    private int clientNumber = 0;
+    private LinkedList<Socket> activeSockets;
 
-
-    private int serverPort;
-
-    public Server(int port)  {
+    public Server(int port,int serverPlayerLimit)  {
         try
         {
-            serverPort = port;
+
+            playerLimit = serverPlayerLimit;
+            activeSockets = new LinkedList<Socket>();
             serverSocket = new ServerSocket(port);
+            //serverSocket.setSoTimeout(5000);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
-    public void run() {
-        while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("A new client is connected : " + clientSocket);
-                DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-                DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-
-                Thread thread = new ClientHandler(clientSocket, in, out);
-                thread.start();
-
-
-            } catch (Exception e) {
-                stop();
-                e.printStackTrace();
+    private void update()
+    {
+        for(int i = 0;i<clientNumber;i++)
+        {
+            if(activeSockets.get(i).isClosed())
+            {
+                activeSockets.remove(i);
+                i--;
+                clientNumber--;
             }
         }
     }
 
-    public void stop() {
+    public void run() {
+        try {
+        while (true) {
+
+                if (clientNumber < playerLimit)
+                {
+                    Socket clientSocket = serverSocket.accept();
+
+                    System.out.println("A new client is trying to connect : " + clientSocket);
+                    DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+                    DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+                    activeSockets.addLast(clientSocket);
+                    clientNumber++;
+
+
+                    Thread thread = new ClientHandler(clientSocket, in, out);
+                    thread.start();
+                }
+                update();
+            }
+        }
+        catch (Exception e) {
+            stop();
+            e.printStackTrace();
+        }
+    }
+
+    private void stop() {
         try {
             serverSocket.close();
         } catch (IOException e) {
@@ -74,34 +91,45 @@ public class Server {
 
         @Override
         public void run() {
-            String received;
+
+            if(checkIfAlive()==false)
+                return;
             while (true) {
                 try {
 
-                    // Ask user what he wants
-                    dos.writeUTF("Write Yeah");
+                    String received = dis.readUTF();
+                    if (received.equals("Acknowledge"))
 
-                    // receive the answer from client
-                    received = dis.readUTF();
-                    if (received == "Yeah")
-                        System.out.print("Hell yeah.");
-                    else
-                        System.out.print("Hell no.");
-                    break;
+                        System.out.println(socket + " is connected to server");
+                    else if(received.equals("I need player list"))
+                    {
+                        System.out.println(socket + " is asking for players list");
+                        String toSend = "";
+                        for(int i=0;i<clientNumber;i++)
+                        {
+                            toSend += getActiveSockets().get(i) + "\n";
+                        }
+                        dos.writeUTF(toSend);
+                    }
 
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
-            try {
-                // closing resources
-                this.dis.close();
-                this.dos.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+        private boolean checkIfAlive()
+        {
+            return !socket.isClosed();
+        }
+    }
+
+    public LinkedList<Socket> getActiveSockets()
+    {
+        return activeSockets;
+    }
+    public int getPlayerLimit()
+    {
+        return playerLimit;
     }
 }

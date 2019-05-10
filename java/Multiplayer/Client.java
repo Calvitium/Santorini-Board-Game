@@ -1,56 +1,52 @@
 package Multiplayer;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
     private Socket clientSocket;
+    private DataOutputStream output;
+    private DataInputStream input;
 
 
     public Client(String ip, int port) {
         try {
             clientSocket = new Socket(ip, port);
+            clientSocket.setSoTimeout(5000);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void sendMessage()  {
+    public void sendAcknowledgement()  {
         try {
-            DataInputStream input = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
-            //Scanner scn = new Scanner(System.in);
-            while (true) {
-                String toSend = "Yeah";
+            input = new DataInputStream(clientSocket.getInputStream());
+            output = new DataOutputStream(clientSocket.getOutputStream());
+
+
+                String toSend = "Acknowledge";
                 output.writeUTF(toSend);
+        }
+        catch(IOException e) {
+            e.printStackTrace();
 
-                // If client sends exit,close this connection
-                // and then break from the while loop
-                if (toSend.equals("Exit")) {
-                    System.out.println("Closing this connection : " + clientSocket);
-                    clientSocket.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
+        }
+    }
+    public String askForPlayerList() {
+        String received = "There are no players, sth wrong.";
+        try {
+            String toSend = "I need player list";
+            output.writeUTF(toSend);
 
-                // printing date or time as requested by client
-                String received = input.readUTF();
-                System.out.println(received);
-                //scn.close();
-                output.close();
-                input.close();
-            }
+             received = input.readUTF();
         }
         catch(IOException e) {
             e.printStackTrace();
         }
-
-
-
-
-
+        return received;
     }
 
 

@@ -5,9 +5,12 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
@@ -24,6 +27,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     float tabHeight, tabWidth;
     Container buttons;
     Container myWindow;
+    Container playerNumberButtons;
 
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
@@ -39,6 +43,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         tabHeight = windowHeight / 3;
         createBackground();
         createButtons();
+        createPlayerNumberButtons();
     }
 
     @Override
@@ -65,4 +70,30 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     }
 
     public abstract void createButtons();
+    public void createPlayerNumberButtons() {
+        playerNumberButtons = new Container();
+        playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
+        playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
+
+        createPlayerButton(2, playerNumberButtons);
+        createPlayerButton(3, playerNumberButtons);
+        createPlayerButton(4, playerNumberButtons);
+
+
+    }
+
+    public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
+        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
+        newButton.setColor(ColorRGBA.Green);
+        newButton.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute(Button source) {
+                GAME.setPlayerNumber(numberOfPlayers);
+                stateManager.cleanup();
+                stateManager.attach(GAME.initializationState);
+                stateManager.detach(GAME.menuState);
+
+            }
+        });
+    }
 }
