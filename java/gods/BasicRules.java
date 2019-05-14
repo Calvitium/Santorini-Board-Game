@@ -30,7 +30,7 @@ public class BasicRules {
         CollisionResult closest = results.getClosestCollision(); // closest tile that was hit
         for(Vector2f coordinates : selected.getAdjacentTiles())  // Target comparison
         {
-            Board.BoardTile target = BOARD.collidingTile((int)coordinates.x, (int)coordinates.y, closest); // an attempt of setting the target tile
+            Board.BoardTile target = BOARD.getCollidingTile((int)coordinates.x, (int)coordinates.y, closest); // an attempt of setting the target tile
             if(target != null && target.getCoordinates().equals(coordinates))
                 return target;
 

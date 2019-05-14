@@ -33,7 +33,6 @@ public class MenuState extends SantoriniMenuState {
 
         Button online = buttons.addChild(new Button("Online"));
         online.setColor(ColorRGBA.Green);
-
         hotSeat.addClickCommands((Command<Button>) source -> switchToOtherContainer(buttons, playerNumberButtons));
         online.addClickCommands((Command<Button>) source -> {
             stateManager.cleanup();
@@ -63,15 +62,12 @@ public class MenuState extends SantoriniMenuState {
     private void createButton(int numberOfPlayers, Container playerNumberButtons) {
         Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
         newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands(new Command<Button>() {
-            @Override
-            public void execute(Button source) {
-                GAME.setPlayerNumber(numberOfPlayers);
-                stateManager.cleanup();
-                stateManager.attach(GAME.initializationState);
-                stateManager.detach(GAME.menuState);
+        newButton.addClickCommands((Command<Button>) source -> {
+            GAME.setPlayerNumber(numberOfPlayers);
+            stateManager.cleanup();
+            stateManager.attach(GAME.initializationState);
+            stateManager.detach(GAME.menuState);
 
-            }
         });
     }
 

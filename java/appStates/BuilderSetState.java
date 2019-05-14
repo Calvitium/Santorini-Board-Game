@@ -15,7 +15,6 @@ import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 import controler.BuilderSetStateListener;
-import model.Board;
 import model.Builder;
 
 import static appStates.Game.GAME;
@@ -107,7 +106,7 @@ public class BuilderSetState extends SantoriniState {
     }
 
     private boolean isTileOccupable(int column, int row) {
-        return BOARD.collidingTile(column, row, currentTile) != null &&
+        return BOARD.getCollidingTile(column, row, currentTile) != null &&
                !BOARD.getTile(column, row).isCompleted() ;
     }
 

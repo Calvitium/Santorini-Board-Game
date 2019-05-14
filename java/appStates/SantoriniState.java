@@ -12,11 +12,11 @@ import model.Player;
 import static appStates.Game.GAME;
 
 public abstract class SantoriniState extends AbstractAppState {
-    protected AssetManager assetManager;
+    AssetManager assetManager;
     public AppStateManager stateManager;
     public InputManager inputManager;
     public Camera cam;
-    protected Node rootNode;
+    Node rootNode;
     public Player[] players;
 
     protected void setClassFields(){

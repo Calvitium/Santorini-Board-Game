@@ -9,6 +9,8 @@ import com.jme3.scene.shape.Box;
 
 import java.util.ArrayList;
 
+import static TESTS.BoardTest.testInstance;
+
 public class Builder {
    public static final float[] OFFSETS = new float[]{3.0f, 13.0f, 20.2f, 26.0f};
 // basic info about builder's location
@@ -25,6 +27,18 @@ public class Builder {
     private Node builderNode;
     private Geometry builderModel;
     private Material material;
+
+    public Builder(int column, int row) {
+        floorLVL = Floor.ZERO;
+        adjacentTiles = new ArrayList<>();
+        moved = false;
+        built = false;
+        set = true;
+        tileColumn = column;
+        tileRow = row;
+        testInstance.getTile(column, row).setBuildable(false);
+        testInstance.getTile(column, row).setMovable(false);
+    }
 
     public Builder(AssetManager assetManager, String color) {
     // 1. preliminary initialization

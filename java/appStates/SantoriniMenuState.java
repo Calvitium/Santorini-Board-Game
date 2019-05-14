@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.core.GuiComponent;
 import com.simsilica.lemur.style.BaseStyles;
 
 import static appStates.Game.GAME;
@@ -54,7 +55,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         // Set 'glass' as the default style when not specified
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
         QuadBackgroundComponent background = new QuadBackgroundComponent();
-        background.setTexture(assetManager.loadTexture("Textures/Textures/Sand.jpg"));
+        background.setTexture(assetManager.loadTexture("Textures/Textures/Backgroundd.png"));
 
         // Create a simple container for our elements
         myWindow = new Container();
