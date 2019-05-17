@@ -62,7 +62,7 @@ public class BoardTest {
     }
 
     @Test
-    public void whenTwoTilesWithSameCoordsAreGivenTheyAreEqual() {
+    public void whenTwoTilesWithSameCoordinatesAreGivenTheyAreEqual() {
         BoardTile tile1 = new BoardTile(1,2);
         BoardTile tile2 = new BoardTile(1,2);
         assertEquals(tile1,tile2);
@@ -203,7 +203,5 @@ public class BoardTest {
         appMode = PLAY;
         testInstance = null;
     }
-
-
 
 }

@@ -28,7 +28,7 @@ public class Player {
 
 /** Returns true if male/female builder of a players was set OR false if not */
     public boolean isBuilderSet(Builder builder) {
-    return builder.isSet();
+    return builder.isPlaced();
 }
 
 /** Attaches a builder to the BOARD during the initialization phase */
@@ -38,7 +38,7 @@ public class Player {
         buildersNode.attachChild(builder.getBuilderNode());
     // 2. update builder's coordinates and movable/buildable flags
         builder.setCoordinates(column, row);
-        builder.setEnabled(true);
+        builder.setPlaced(true);
         BOARD.getTile(column, row).setBuildable(false);
         BOARD.getTile(column, row).setMovable(false);
     }
