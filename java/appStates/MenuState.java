@@ -37,7 +37,7 @@ public class MenuState extends SantoriniMenuState {
         hotSeat.addClickCommands((Command<Button>) source -> switchToOtherContainer(buttons, playerNumberButtons));
         online.addClickCommands((Command<Button>) source -> {
             stateManager.cleanup();
-            stateManager.attach(new MultiPlayerLobbyState());
+            stateManager.attach(GAME.multiPlayerLobbyState);
             stateManager.detach(GAME.menuState);
         });
     }

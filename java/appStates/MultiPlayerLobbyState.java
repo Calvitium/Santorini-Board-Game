@@ -21,10 +21,9 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
     private Container insertIPTextFields;
     private TextField insertIP;
     private ActionListener actionListener;
-    public static String insertedIP = "";
-    protected static Server server;
-    protected static Client client;
-    //protected static Socket clients[];
+    private String insertedIP = "";
+    private static Server server;
+    static Client client;
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
@@ -83,7 +82,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
             guiNode.detachChild(buttons);
             guiNode.attachChild(playerNumberButtons);
 
-            // create a client here
+
         });
     }
 
@@ -105,11 +104,12 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
             try {
                 if(!isValidAddress())
                     throw new IOException();
-                client = new Client(insertedIP, 6666);
-                client.sendAcknowledgement();
-                //client.askForPlayerList();
-                //this.setEnabled(false);
-
+                client = new Client(insertedIP, 6666,false);
+                if(client.sendAcknowledgement()==0)
+                {
+                    stateManager.attach(new LobbyState());
+                    stateManager.detach(this);
+                }
 
             }
             catch(SocketTimeoutException e)
@@ -123,8 +123,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 System.out.print("Failed to connect.");
                 insertedIP = "";
             }
-            stateManager.attach(new LobbyState());
-            stateManager.detach(this);
+
         }
 
 
@@ -178,16 +177,22 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
     public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
         Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
         newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands(new Command<Button>() {
-            @Override
-            public void execute(Button source) {
+        newButton.addClickCommands((Command<Button>) source -> {
+
+
                 GAME.setPlayerNumber(numberOfPlayers);
                 server = new Server(6666,GAME.getPlayerNumber());
-                server.run();
+                server.start();
+                client = new Client("127.0.0.1", 6666,true);
+                client.sendAcknowledgement();
+                // server.startServerController();
+                stateManager.attach(new LobbyState());
+                stateManager.detach(this);
 
 
 
-            }
+
+
         });
     }
 }

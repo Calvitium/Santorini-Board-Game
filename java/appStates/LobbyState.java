@@ -2,11 +2,19 @@ package appStates;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import java.net.Socket;
+
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 
 import static appStates.MultiPlayerLobbyState.client;
+import static appStates.Game.GAME;
+
+
 
 
 public class LobbyState extends SantoriniMenuState{
@@ -14,12 +22,13 @@ public class LobbyState extends SantoriniMenuState{
     private Container playerListCont;
     private TextField playerList;
     private String allPlayers;
-    //private int playerNumber;
+
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
         super.initialize(stateManager, appImp);
         createPlayerList();
+        createConnectionButtons();
     }
     @Override
     public void cleanup() {
@@ -55,6 +64,23 @@ public class LobbyState extends SantoriniMenuState{
     {
         allPlayers = client.askForPlayerList();
         playerList.setText(allPlayers);
+    }
+    private void createConnectionButtons()
+    {
+        Button disconnect = buttons.addChild(new Button("Disconnect"));
+        disconnect.setColor(ColorRGBA.Green);
+        disconnect.addClickCommands((Command<Button>) source -> {
+            client.closeConnection();
+            stateManager.attach(GAME.multiPlayerLobbyState);
+            stateManager.detach(this);
+
+        });
+        if(client.isHost() == true)
+        {
+            Button startGame = buttons.addChild(new Button("Start game."));
+            startGame.setColor(ColorRGBA.Green);
+        }
+
     }
 
 

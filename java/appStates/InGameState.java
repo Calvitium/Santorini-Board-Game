@@ -21,7 +21,7 @@ public class InGameState extends SantoriniState {
     public static int roundPhase;
     public static final int SELECTION_PHASE = 0;
     public static final int MOVEMENT_PHASE = 1;
-    public   static final int BUILDING_PHASE = 2;
+    public static final int BUILDING_PHASE = 2;
     private TextField turnPanel;
     private InGameStateListener actionListener;
 
