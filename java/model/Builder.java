@@ -6,10 +6,12 @@ import com.jme3.math.Vector2f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import controler.AppMode;
 
 import java.util.ArrayList;
 
-import static TESTS.BoardTest.testInstance;
+import static TESTS.BoardTest.testBoard;
+import static appStates.Game.appMode;
 
 public class Builder {
    public static final float[] OFFSETS = new float[]{3.0f, 13.0f, 20.2f, 26.0f};
@@ -36,8 +38,8 @@ public class Builder {
         placed = true;
         tileColumn = column;
         tileRow = row;
-        testInstance.getTile(column, row).setBuildable(false);
-        testInstance.getTile(column, row).setMovable(false);
+        testBoard.getTile(column, row).setBuildable(false);
+        testBoard.getTile(column, row).setMovable(false);
     }
 
     public Builder(AssetManager assetManager, String color) {
@@ -52,6 +54,7 @@ public class Builder {
         Box box = new Box(1f, 3f, 1f);
         builderModel = new Geometry("Builder", box);
         builderModel.scale(3.0f);
+        if(appMode == AppMode.TEST) return;
         material = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         builderModel.setMaterial(material);
         setTeamColor(color);

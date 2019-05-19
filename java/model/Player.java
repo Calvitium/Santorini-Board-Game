@@ -8,6 +8,9 @@ import com.jme3.scene.Node;
 import gods.BasicRules;
 
 import static appStates.Game.GAME;
+import static appStates.Game.appMode;
+import static controler.AppMode.PLAY;
+import static controler.AppMode.TEST;
 import static model.Board.BOARD;
 
 public class Player {
@@ -39,8 +42,14 @@ public class Player {
     // 2. update builder's coordinates and movable/buildable flags
         builder.setCoordinates(column, row);
         builder.setPlaced(true);
-        BOARD.getTile(column, row).setBuildable(false);
-        BOARD.getTile(column, row).setMovable(false);
+       if(appMode == PLAY) {
+           BOARD.getTile(column, row).setBuildable(false);
+           BOARD.getTile(column, row).setMovable(false);
+       }
+       else if(appMode == TEST) {
+           Board.getTestInstance().getTile(column, row).setMovable(false);
+           Board.getTestInstance().getTile(column, row).setBuildable(false);
+       }
     }
 
 /** Returns a builder that the cursor collided with - basically enables a selection of chosen builder */
@@ -79,10 +88,11 @@ public class Player {
             rules.build(ray, results, female);
     }
 
-    public boolean isWinAccomplished(Builder builder){
+    public boolean isWinAccomplished(Builder builder) {
         return rules.isWinAccomplished(builder);
     }
-/** After the end of a turn, we reset flags that tell us whether builder has moved/built in this turn (preparation for the next turn) */
+
+    /** After the end of a turn, we reset flags that tell us whether builder has moved/built in this turn (preparation for the next turn) */
     public void resetBuilderPhaseFlags(Builder builder) {
         if(builder.getBuilderNode().equals(male.getBuilderNode()))
         {
@@ -95,5 +105,8 @@ public class Player {
             female.setBuilt(false);
             female.setMoved(false);
         }
+    }
+    public BasicRules getRules() {
+        return rules;
     }
 }

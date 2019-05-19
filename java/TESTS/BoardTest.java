@@ -21,12 +21,12 @@ import static appStates.Game.appMode;
 
 public class BoardTest {
 
-    public static Board testInstance;
+    public static Board testBoard;
 
     @BeforeClass
     public static void setTestMode(){
         appMode = TEST;
-        testInstance = getTestInstance();
+        testBoard = getTestInstance();
     }
 
     @Test
@@ -71,7 +71,7 @@ public class BoardTest {
     @Test
     public void getTileTest() {
         BoardTile expected = new BoardTile(0,0);
-        BoardTile real = testInstance.getTile(0,0);
+        BoardTile real = testBoard.getTile(0,0);
         assertEquals(real, expected);
     }
 
@@ -138,15 +138,15 @@ public class BoardTest {
     public void whenEmptyBoardIsGivenAllAdjacentTilesAreFreeToBuild() {
         roundPhase  = BUILDING_PHASE;
         Builder builder = new Builder(0,0);
-        testInstance.showAvailableTiles(builder, showTilesMode.showTiles);
+        testBoard.showAvailableTiles(builder, showTilesMode.showTiles);
         int size = builder.getAdjacentTiles().size();
         assertEquals(size, 3);
     }
 
     @After
     public void clearAfterPrevious1() {
-        testInstance.getTile(0,0).setMovable(true);
-        testInstance.getTile(0,0).setBuildable(true);
+        testBoard.getTile(0,0).setMovable(true);
+        testBoard.getTile(0,0).setBuildable(true);
     }
 
     @Test
@@ -155,27 +155,27 @@ public class BoardTest {
         Builder builder1 = new Builder(2,2);
         Builder builder2 = new Builder(3,3);
 
-        testInstance.showAvailableTiles(builder1, showTilesMode.showTiles);
+        testBoard.showAvailableTiles(builder1, showTilesMode.showTiles);
         int size = builder1.getAdjacentTiles().size();
         assertEquals(size, 7);
     }
 
     @After
     public void clearAfterPrevious2 () {
-        testInstance.getTile(2,2).setMovable(true);
-        testInstance.getTile(3,3).setMovable(true);
-        testInstance.getTile(2,2).setBuildable(true);
-        testInstance.getTile(3,3).setBuildable(true);
+        testBoard.getTile(2,2).setMovable(true);
+        testBoard.getTile(3,3).setMovable(true);
+        testBoard.getTile(2,2).setBuildable(true);
+        testBoard.getTile(3,3).setBuildable(true);
     }
 
     @Test
     public void whenTilesAroundBuilderAreCompletedTheyAreTakenIntoAccount() {
         roundPhase = BUILDING_PHASE;
         Builder builder = new Builder(2,2);
-        testInstance.getTile(1,2).setCompleted(true);
-        testInstance.getTile(2,3).setCompleted(true);
-        testInstance.getTile(1,1).setCompleted(true);
-        testInstance.showAvailableTiles(builder, showTilesMode.showTiles);
+        testBoard.getTile(1,2).setCompleted(true);
+        testBoard.getTile(2,3).setCompleted(true);
+        testBoard.getTile(1,1).setCompleted(true);
+        testBoard.showAvailableTiles(builder, showTilesMode.showTiles);
         int size = builder.getAdjacentTiles().size();
         assertEquals(size, 5);
     }
@@ -183,25 +183,25 @@ public class BoardTest {
     @Test
     public void hideAdjacentTiles() {
         Builder builder = new Builder(2,2);
-        testInstance.showAvailableTiles(builder, showTilesMode.showTiles);
-        testInstance.showAvailableTiles(builder, showTilesMode.hideTiles);
+        testBoard.showAvailableTiles(builder, showTilesMode.showTiles);
+        testBoard.showAvailableTiles(builder, showTilesMode.hideTiles);
         int size = builder.getAdjacentTiles().size();
         assertEquals(size, 0);
     }
 
     @After
     public void clearAfterPrevious3() {
-        testInstance.getTile(1,2).setCompleted(false);
-        testInstance.getTile(2,3).setCompleted(false);
-        testInstance.getTile(1,1).setCompleted(false);
-        testInstance.getTile(2,2).setBuildable(true);
-        testInstance.getTile(2,2).setMovable(true);
+        testBoard.getTile(1,2).setCompleted(false);
+        testBoard.getTile(2,3).setCompleted(false);
+        testBoard.getTile(1,1).setCompleted(false);
+        testBoard.getTile(2,2).setBuildable(true);
+        testBoard.getTile(2,2).setMovable(true);
     }
 
     @AfterClass
     public static void clear() {
         appMode = PLAY;
-        testInstance = null;
+        testBoard = null;
     }
 
 }

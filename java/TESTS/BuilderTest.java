@@ -9,14 +9,14 @@ import static controler.AppMode.TEST;
 import static model.Floor.SECOND;
 import static model.Floor.ZERO;
 import static org.junit.Assert.*;
-import static TESTS.BoardTest.testInstance;
+import static TESTS.BoardTest.testBoard;
 
 public class BuilderTest {
 
     @BeforeClass
     public static void setTestMode() {
         appMode = TEST;
-        testInstance = Board.getTestInstance();
+        testBoard = Board.getTestInstance();
     }
 
     @Test

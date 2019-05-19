@@ -348,5 +348,8 @@ public final class Board {
             return this.getCoordinates().equals(((BoardTile) tile).getCoordinates());
         }
 
+        public void setFloorLVL(Floor level) {
+            height = level;
+        }
     }
 }
