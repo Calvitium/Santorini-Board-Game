@@ -4,7 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import java.net.Socket;
+
 
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
@@ -22,6 +22,7 @@ public class LobbyState extends SantoriniMenuState{
     private Container playerListCont;
     private TextField playerList;
     private String allPlayers;
+    private Thread initializationTrigger;
 
 
     @Override
@@ -29,6 +30,9 @@ public class LobbyState extends SantoriniMenuState{
         super.initialize(stateManager, appImp);
         createPlayerList();
         createConnectionButtons();
+
+
+
     }
     @Override
     public void cleanup() {
@@ -39,6 +43,7 @@ public class LobbyState extends SantoriniMenuState{
     @Override
     public void update(float tpf) {
         updatePlayerList();
+
     }
     @Override
     public void createButtons() {
@@ -63,27 +68,54 @@ public class LobbyState extends SantoriniMenuState{
     private void updatePlayerList()
     {
         allPlayers = client.askForPlayerList();
-        playerList.setText(allPlayers);
+        if(allPlayers.equals(""))
+            returnToLastState();
+        else
+            playerList.setText(allPlayers);
     }
     private void createConnectionButtons()
     {
         Button disconnect = buttons.addChild(new Button("Disconnect"));
         disconnect.setColor(ColorRGBA.Green);
         disconnect.addClickCommands((Command<Button>) source -> {
-            client.closeConnection();
-            stateManager.attach(GAME.multiPlayerLobbyState);
-            stateManager.detach(this);
-
+            returnToLastState();
         });
-        if(client.isHost() == true)
+        if(client.isHost())
         {
             Button startGame = buttons.addChild(new Button("Start game."));
             startGame.setColor(ColorRGBA.Green);
+            startGame.addClickCommands((Command<Button>) source -> {
+
+                if(client.askForPlayerCount() == GAME.getPlayerNumber())
+                    client.sendGameTrigger();
+            });
         }
 
     }
+    private void returnToLastState()
+    {
+        client.closeConnection(client.isHost());
+        stateManager.attach(new MultiPlayerLobbyState());
+        stateManager.detach(this);
+    }
+    /*
+    private class InitializationTrigger extends Thread
+    {
+        private LobbyState currentLobbyState;
 
-
+        InitializationTrigger(LobbyState i)
+        {
+            currentLobbyState = i;
+        }
+        @Override
+        public void run() {
+            if(client.checkIfGameStarts())
+            {
+                stateManager.attach(GAME.initializationState);
+                stateManager.detach(currentLobbyState);
+            }
+        }
+    }*/
 
 
 

@@ -1,6 +1,5 @@
 package Multiplayer;
 
-import sun.net.ConnectionResetException;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,14 +14,14 @@ public class Server extends  Thread{
     private ServerSocket serverSocket;
     private int playerLimit;
     private int clientNumber = 0;
-    private LinkedList<Socket> activeSockets;
+    private LinkedList<ClientHandler> activeSockets;
 
     public Server(int port,int serverPlayerLimit)  {
         try
         {
 
             playerLimit = serverPlayerLimit;
-            activeSockets = new LinkedList<Socket>();
+            activeSockets = new LinkedList<ClientHandler>();
             serverSocket = new ServerSocket(port);
         }
         catch (IOException e) {
@@ -33,20 +32,20 @@ public class Server extends  Thread{
     @Override
     public void run() {
         try {
-        while (true) {
+        while (!serverSocket.isClosed()) {
 
             Socket clientSocket = serverSocket.accept();
-
             System.out.println("A new client is trying to connect : " + clientSocket);
             DataInputStream in = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             if (clientNumber < playerLimit) {
 
-                activeSockets.addLast(clientSocket);
+
                 clientNumber++;
                 out.writeUTF("Connection achieved");
 
-                Thread thread = new ClientHandler(clientSocket, in, out);
+                activeSockets.addLast(new ClientHandler(clientSocket, in, out));
+                Thread thread = activeSockets.getLast();
                 thread.start();
             }
             else {
@@ -54,18 +53,22 @@ public class Server extends  Thread{
             }
             }
         }
-        catch (Exception e) {
+        catch (IOException  e) {
             stopServer();
             e.printStackTrace();
+            return;
         }
+
     }
 
     private void stopServer() {
         try {
             serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
+        clientNumber = 0;
+        activeSockets.clear();
     }
     private class ClientHandler extends Thread {
 
@@ -90,30 +93,43 @@ public class Server extends  Thread{
                     if(!checkIfAlive())
                         return;
                     String received = dis.readUTF();
-                    if(received.equals("ByeBye"))
-                    {
-                        activeSockets.remove(socket);
-                        clientNumber--;
+
+                    switch(received) {
+                        case "ByeBye":
+                            activeSockets.remove(socket);
+                            clientNumber--;
+                            break;
+                        case "CloseServer":
+                            serverSocket.close();
+                            clientNumber = 0;
+                            activeSockets.clear();
+                            return;
+                        case "Acknowledge":
+                            System.out.println(socket + " is connected to server");
+                            break;
+                        case "GameTrigger":
+                            for(int i=0;i<clientNumber;i++)
+                            {
+                                activeSockets.get(i).dos.writeUTF("InitGame");
+                            }
+                            break;
+                        case "PlayerCount":
+                            dos.writeInt(clientNumber);
+                            break;
+                        case "I need player list":
+                            String toSend = "";
+                            for(int i=0;i<clientNumber;i++)
+                            {
+                                toSend += getActiveSockets().get(i) + "\n";
+                            }
+                            dos.writeUTF(toSend);
+                            break;
                     }
-                    else if (received.equals("Acknowledge"))
-
-                        System.out.println(socket + " is connected to server");
-                    else if(received.equals("I need player list"))
-                    {
-                        String toSend = "";
-                        for(int i=0;i<clientNumber;i++)
-                        {
-                            toSend += getActiveSockets().get(i) + "\n";
-                        }
-                        dos.writeUTF(toSend);
-                    }
-
-
                 }
                 catch (SocketException e) {
 
                     e.printStackTrace();
-                    activeSockets.remove(socket);
+                    activeSockets.remove(this);
                     clientNumber--;
                     return;
 
@@ -122,6 +138,7 @@ public class Server extends  Thread{
                     e.printStackTrace();
                     try {
                         socket.close();
+                        return;
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -129,13 +146,10 @@ public class Server extends  Thread{
 
             }
         }
-        private boolean checkIfAlive()
-        {
-            return !socket.isClosed();
-        }
+        private boolean checkIfAlive() { return !socket.isClosed(); }
     }
 
-    private LinkedList<Socket> getActiveSockets()
+    private LinkedList<ClientHandler> getActiveSockets()
     {
         return activeSockets;
     }

@@ -118,11 +118,12 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 insertedIP = "";
 
             }
-            catch(IOException e )
+            catch(IOException | NullPointerException e )
             {
                 System.out.print("Failed to connect.");
                 insertedIP = "";
             }
+
 
         }
 
@@ -185,7 +186,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 server.start();
                 client = new Client("127.0.0.1", 6666,true);
                 client.sendAcknowledgement();
-                // server.startServerController();
+
                 stateManager.attach(new LobbyState());
                 stateManager.detach(this);
 

@@ -10,13 +10,15 @@ public class Client {
     private DataOutputStream output;
     private DataInputStream input;
     private boolean isHost;
+    private boolean isInGame = false;
+
 
 
     public Client(String ip, int port, boolean host) {
         try {
             clientSocket = new Socket(ip, port);
-            //clientSocket.setSoTimeout(5000);
             isHost = host;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,15 +36,17 @@ public class Client {
             output = new DataOutputStream(clientSocket.getOutputStream());
 
 
-                String toSend = "Acknowledge";
-                output.writeUTF(toSend);
+            String toSend = "Acknowledge";
+            output.writeUTF(toSend);
 
-                String received = input.readUTF();
-                if(received.equals("Connection failed, room full")) {
-                    clientSocket.close();
-                    System.out.println(received);
-                    return -1;
-                }
+            String received = input.readUTF();
+            if(received.equals("Connection failed, room full")) {
+                clientSocket.close();
+                System.out.println(received);
+                return -1;
+            }
+
+
 
 
         }
@@ -52,17 +56,56 @@ public class Client {
         }
         return 0;
     }
-    public void closeConnection()
+    public void sendGameTrigger()
     {
-        try {
-            output.writeUTF("ByeBye");
-            output.close();
-            input.close();
-            clientSocket.close();
+        try{
+            output.writeUTF("TriggerGame");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+    public void startClientThread()
+    {
+        Thread thread = new ClientListener(input,output,clientSocket);
+        thread.start();
+    }
+    public boolean checkIfGameStarts()
+    {
+        try {
+            String received = input.readUTF();
+            if(received.equals("GameInit"))
+                return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public void closeConnection(boolean isHost)
+    {
+        try {
+            output.writeUTF("ByeBye");
+            if(isHost == true)
+                output.writeUTF("CloseServer");
+            output.close();
+            input.close();
+            clientSocket.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public int askForPlayerCount()
+    {
+        try {
+            output.writeUTF("PlayerCount");
+            return input.readInt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
     public String askForPlayerList() {
         String received = "There are no players, sth wrong.";
@@ -77,6 +120,52 @@ public class Client {
         }
         return received;
     }
+
+    private class ClientListener extends Thread
+    {
+        private DataOutputStream dos;
+        private DataInputStream dis;
+        private Socket socket;
+
+        ClientListener(DataInputStream dis, DataOutputStream dos, Socket socket)
+        {
+            this.dos = dos;
+            this.dis = dis;
+            this.socket = socket;
+        }
+
+        @Override
+        public void run()
+        {
+            while(true)
+            {
+                try {
+                    String received = dis.readUTF();
+
+                    switch(received) {
+                        case "GameInit":
+                            isInGame = true;
+                            break;
+
+                    }
+
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    try {
+                        socket.close();
+                        return;
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
 
 
 }
