@@ -10,9 +10,6 @@ public class Client {
     private DataOutputStream output;
     private DataInputStream input;
     private boolean isHost;
-    private boolean isInGame = false;
-
-
 
     public Client(String ip, int port, boolean host) {
         try {
@@ -35,7 +32,6 @@ public class Client {
             input = new DataInputStream(clientSocket.getInputStream());
             output = new DataOutputStream(clientSocket.getOutputStream());
 
-
             String toSend = "Acknowledge";
             output.writeUTF(toSend);
 
@@ -45,10 +41,6 @@ public class Client {
                 System.out.println(received);
                 return -1;
             }
-
-
-
-
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -65,17 +57,11 @@ public class Client {
         }
 
     }
-    public void startClientThread()
-    {
-        Thread thread = new ClientListener(input,output,clientSocket);
-        thread.start();
-    }
-    public boolean checkIfGameStarts()
+    public boolean checkIfGameStarted()
     {
         try {
-            String received = input.readUTF();
-            if(received.equals("GameInit"))
-                return true;
+            output.writeUTF("HasTheGameStarted");
+            return input.readBoolean();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,52 +106,6 @@ public class Client {
         }
         return received;
     }
-
-    private class ClientListener extends Thread
-    {
-        private DataOutputStream dos;
-        private DataInputStream dis;
-        private Socket socket;
-
-        ClientListener(DataInputStream dis, DataOutputStream dos, Socket socket)
-        {
-            this.dos = dos;
-            this.dis = dis;
-            this.socket = socket;
-        }
-
-        @Override
-        public void run()
-        {
-            while(true)
-            {
-                try {
-                    String received = dis.readUTF();
-
-                    switch(received) {
-                        case "GameInit":
-                            isInGame = true;
-                            break;
-
-                    }
-
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                    try {
-                        socket.close();
-                        return;
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        }
-
-
-
-    }
-
 
 
 }

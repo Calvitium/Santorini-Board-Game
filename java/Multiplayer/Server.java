@@ -75,6 +75,7 @@ public class Server extends  Thread{
         private final DataInputStream dis;
         private final DataOutputStream dos;
         private final Socket socket;
+        private boolean isInGame = false;
 
 
         // Constructor
@@ -107,10 +108,17 @@ public class Server extends  Thread{
                         case "Acknowledge":
                             System.out.println(socket + " is connected to server");
                             break;
-                        case "GameTrigger":
+                        case "HasTheGameStarted":
+                            if(isInGame == true)
+                                dos.writeBoolean(true);
+                            else
+                                dos.writeBoolean(false);
+                            break;
+                        case "TriggerGame":
                             for(int i=0;i<clientNumber;i++)
                             {
-                                activeSockets.get(i).dos.writeUTF("InitGame");
+                                //activeSockets.get(i).dos.writeUTF("InitGame");
+                                activeSockets.get(i).isInGame = true;
                             }
                             break;
                         case "PlayerCount":

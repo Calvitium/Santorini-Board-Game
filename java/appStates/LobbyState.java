@@ -22,7 +22,6 @@ public class LobbyState extends SantoriniMenuState{
     private Container playerListCont;
     private TextField playerList;
     private String allPlayers;
-    private Thread initializationTrigger;
 
 
     @Override
@@ -30,9 +29,6 @@ public class LobbyState extends SantoriniMenuState{
         super.initialize(stateManager, appImp);
         createPlayerList();
         createConnectionButtons();
-
-
-
     }
     @Override
     public void cleanup() {
@@ -43,7 +39,8 @@ public class LobbyState extends SantoriniMenuState{
     @Override
     public void update(float tpf) {
         updatePlayerList();
-
+        if(client.checkIfGameStarted() == true)
+            moveToInitialization();
     }
     @Override
     public void createButtons() {
@@ -52,6 +49,11 @@ public class LobbyState extends SantoriniMenuState{
         buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
         guiNode.attachChild(buttons);
 
+    }
+    private void moveToInitialization()
+    {
+        stateManager.attach(GAME.initializationState);
+        stateManager.detach(this);
     }
 
     private void createPlayerList(){
@@ -98,25 +100,4 @@ public class LobbyState extends SantoriniMenuState{
         stateManager.attach(new MultiPlayerLobbyState());
         stateManager.detach(this);
     }
-    /*
-    private class InitializationTrigger extends Thread
-    {
-        private LobbyState currentLobbyState;
-
-        InitializationTrigger(LobbyState i)
-        {
-            currentLobbyState = i;
-        }
-        @Override
-        public void run() {
-            if(client.checkIfGameStarts())
-            {
-                stateManager.attach(GAME.initializationState);
-                stateManager.detach(currentLobbyState);
-            }
-        }
-    }*/
-
-
-
 }

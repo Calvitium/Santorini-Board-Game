@@ -186,7 +186,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 server.start();
                 client = new Client("127.0.0.1", 6666,true);
                 client.sendAcknowledgement();
-
+                //client.startClientThread();
                 stateManager.attach(new LobbyState());
                 stateManager.detach(this);
 
