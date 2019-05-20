@@ -12,12 +12,12 @@ import static appStates.Game.GAME;
 
 
 public class MenuState extends SantoriniMenuState {
-    private Container playerNumberButtons;
+
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
         super.initialize(stateManager, appImp);
-        createPlayerNumberButtons();
+
     }
 
     @Override
@@ -36,8 +36,7 @@ public class MenuState extends SantoriniMenuState {
         hotSeat.addClickCommands((Command<Button>) source -> switchToOtherContainer(buttons, playerNumberButtons));
         online.addClickCommands((Command<Button>) source -> {
             stateManager.cleanup();
-            guiNode.attachChild(myWindow);
-            stateManager.attach(new MultiPlayerLobbyState());
+            stateManager.attach(GAME.multiPlayerLobbyState);
             stateManager.detach(GAME.menuState);
         });
     }
@@ -47,29 +46,6 @@ public class MenuState extends SantoriniMenuState {
         guiNode.attachChild(present);
     }
 
-    private void createPlayerNumberButtons() {
-        playerNumberButtons = new Container();
-        playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-
-        createButton(2, playerNumberButtons);
-        createButton(3, playerNumberButtons);
-        createButton(4, playerNumberButtons);
-
-
-    }
-
-    private void createButton(int numberOfPlayers, Container playerNumberButtons) {
-        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
-        newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands((Command<Button>) source -> {
-            GAME.setPlayerNumber(numberOfPlayers);
-            stateManager.cleanup();
-            stateManager.attach(GAME.initializationState);
-            stateManager.detach(GAME.menuState);
-
-        });
-    }
 
 }
 

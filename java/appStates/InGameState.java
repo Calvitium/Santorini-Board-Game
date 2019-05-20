@@ -20,6 +20,8 @@ import static controler.GamePhases.SELECTION_PHASE;
 public class InGameState extends SantoriniState {
     private Builder selectedBuilder; //a builder, who was chosen by a players to make his turn
     public static int active; // players[active] is the one whose turn is currently considered
+
+    
     public static GamePhases roundPhase;
     private TextField turnPanel;
     private InGameStateListener actionListener;

@@ -1,28 +1,27 @@
 package Multiplayer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.text.DateFormat;
-import java.util.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.LinkedList;
 
-public class Server {
-    public ServerSocket serverSocket;
 
+public class Server extends  Thread{
+    private ServerSocket serverSocket;
+    private int playerLimit;
+    private int clientNumber = 0;
+    private LinkedList<ClientHandler> activeSockets;
 
-    private int serverPort;
-
-    public Server(int port)  {
+    public Server(int port,int serverPlayerLimit)  {
         try
         {
-            serverPort = port;
+
+            playerLimit = serverPlayerLimit;
+            activeSockets = new LinkedList<ClientHandler>();
             serverSocket = new ServerSocket(port);
         }
         catch (IOException e) {
@@ -30,39 +29,53 @@ public class Server {
         }
 
     }
-
+    @Override
     public void run() {
-        while (true) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("A new client is connected : " + clientSocket);
-                DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-                DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+        try {
+        while (!serverSocket.isClosed()) {
 
-                Thread thread = new ClientHandler(clientSocket, in, out);
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("A new client is trying to connect : " + clientSocket);
+            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+            if (clientNumber < playerLimit) {
+
+
+                clientNumber++;
+                out.writeUTF("Connection achieved");
+
+                activeSockets.addLast(new ClientHandler(clientSocket, in, out));
+                Thread thread = activeSockets.getLast();
                 thread.start();
-
-
-            } catch (Exception e) {
-                stop();
-                e.printStackTrace();
+            }
+            else {
+                out.writeUTF("Connection failed, room full");
+            }
             }
         }
+        catch (IOException  e) {
+            stopServer();
+            e.printStackTrace();
+            return;
+        }
+
     }
 
-    public void stop() {
+    private void stopServer() {
         try {
             serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
+        clientNumber = 0;
+        activeSockets.clear();
     }
-
     private class ClientHandler extends Thread {
 
         private final DataInputStream dis;
         private final DataOutputStream dos;
         private final Socket socket;
+        private boolean isInGame = false;
 
 
         // Constructor
@@ -74,34 +87,82 @@ public class Server {
 
         @Override
         public void run() {
-            String received;
+
+
             while (true) {
                 try {
+                    if(!checkIfAlive())
+                        return;
+                    String received = dis.readUTF();
 
-                    // Ask user what he wants
-                    dos.writeUTF("Write Yeah");
-
-                    // receive the answer from client
-                    received = dis.readUTF();
-                    if (received == "Yeah")
-                        System.out.print("Hell yeah.");
-                    else
-                        System.out.print("Hell no.");
-                    break;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    switch(received) {
+                        case "ByeBye":
+                            activeSockets.remove(socket);
+                            clientNumber--;
+                            break;
+                        case "CloseServer":
+                            serverSocket.close();
+                            clientNumber = 0;
+                            activeSockets.clear();
+                            return;
+                        case "Acknowledge":
+                            System.out.println(socket + " is connected to server");
+                            break;
+                        case "HasTheGameStarted":
+                            if(isInGame == true)
+                                dos.writeBoolean(true);
+                            else
+                                dos.writeBoolean(false);
+                            break;
+                        case "TriggerGame":
+                            for(int i=0;i<clientNumber;i++)
+                            {
+                                //activeSockets.get(i).dos.writeUTF("InitGame");
+                                activeSockets.get(i).isInGame = true;
+                            }
+                            break;
+                        case "PlayerCount":
+                            dos.writeInt(clientNumber);
+                            break;
+                        case "I need player list":
+                            String toSend = "";
+                            for(int i=0;i<clientNumber;i++)
+                            {
+                                toSend += getActiveSockets().get(i) + "\n";
+                            }
+                            dos.writeUTF(toSend);
+                            break;
+                    }
                 }
-            }
+                catch (SocketException e) {
 
-            try {
-                // closing resources
-                this.dis.close();
-                this.dos.close();
+                    e.printStackTrace();
+                    activeSockets.remove(this);
+                    clientNumber--;
+                    return;
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    try {
+                        socket.close();
+                        return;
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
             }
         }
+        private boolean checkIfAlive() { return !socket.isClosed(); }
+    }
+
+    private LinkedList<ClientHandler> getActiveSockets()
+    {
+        return activeSockets;
+    }
+    public int getPlayerLimit()
+    {
+        return playerLimit;
     }
 }

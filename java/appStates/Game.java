@@ -18,7 +18,9 @@ public class Game extends SimpleApplication {
     MenuState menuState = new MenuState();
     InitializationState initializationState = new InitializationState();
     BuilderSetState builderSetState = new BuilderSetState();
+    MultiPlayerLobbyState multiPlayerLobbyState  = new MultiPlayerLobbyState();
     InGameState inGameState;
+
     //Others
     public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
