@@ -9,12 +9,11 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import model.Builder;
 import model.showTilesMode;
-
-import static appStates.InGameState.BUILDING_PHASE;
-import static appStates.InGameState.MOVEMENT_PHASE;
-import static appStates.InGameState.SELECTION_PHASE;
 import static appStates.InGameState.active;
 import static appStates.InGameState.roundPhase;
+import static controler.GamePhases.BUILDING_PHASE;
+import static controler.GamePhases.MOVEMENT_PHASE;
+import static controler.GamePhases.SELECTION_PHASE;
 import static model.Board.BOARD;
 
 public class InGameStateListener extends SantoriniActionListener {

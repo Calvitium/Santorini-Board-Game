@@ -6,8 +6,12 @@ import com.jme3.math.Vector2f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import controler.AppMode;
 
 import java.util.ArrayList;
+
+import static TESTS.BoardTest.testBoard;
+import static appStates.Game.appMode;
 
 public class Builder {
    public static final float[] OFFSETS = new float[]{3.0f, 13.0f, 20.2f, 26.0f};
@@ -18,13 +22,25 @@ public class Builder {
 // contains "available" tiles during movement/building phase
     private ArrayList<Vector2f> adjacentTiles;
 // flags
-    private boolean set;
+    private boolean placed;
     private boolean moved;
     private boolean built;
-// set of variables necessary to load builder's model
+// placed of variables necessary to load builder's model
     private Node builderNode;
     private Geometry builderModel;
     private Material material;
+
+    public Builder(int column, int row) {
+        floorLVL = Floor.ZERO;
+        adjacentTiles = new ArrayList<>();
+        moved = false;
+        built = false;
+        placed = true;
+        tileColumn = column;
+        tileRow = row;
+        testBoard.getTile(column, row).setBuildable(false);
+        testBoard.getTile(column, row).setMovable(false);
+    }
 
     public Builder(AssetManager assetManager, String color) {
     // 1. preliminary initialization
@@ -32,12 +48,13 @@ public class Builder {
         adjacentTiles = new ArrayList<>();
         moved = false;
         built = false;
-        set = false;
+        placed = false;
         builderNode = new Node("BuilderNode");
     // 2. loading builder model
         Box box = new Box(1f, 3f, 1f);
         builderModel = new Geometry("Builder", box);
         builderModel.scale(3.0f);
+        if(appMode == AppMode.TEST) return;
         material = new Material(assetManager,"Common/MatDefs/Misc/Unshaded.j3md");
         builderModel.setMaterial(material);
         setTeamColor(color);
@@ -47,13 +64,13 @@ public class Builder {
     private void setTeamColor(String color)  {
         switch (color) {
             case "Blue":
-                material.setColor("Color", ColorRGBA.Blue);   // set color of material to blue
+                material.setColor("Color", ColorRGBA.Blue);   // placed color of material to blue
                 break;
             case "Red":
-                material.setColor("Color", ColorRGBA.Red);   // set color of material to blue
+                material.setColor("Color", ColorRGBA.Red);   // placed color of material to blue
                 break;
             case "Green":
-                material.setColor("Color", ColorRGBA.Green);   // set color of material to blue
+                material.setColor("Color", ColorRGBA.Green);   // placed color of material to blue
                 break;
         }
 
@@ -71,20 +88,20 @@ public class Builder {
     }
 
 /** "Set" flag becomes true after setting builder during the initialization phase */
-    void setEnabled(boolean b) { set = b; }
+    public void setPlaced(boolean b) { placed = b; }
 
 /** Adds a tile which has [column][row] coordinates to the adjacency list (builder can move/build there depending on the phase)  */
-    void addAdjacentTile(int column, int row){
+public void addAdjacentTile(int column, int row){
         adjacentTiles.add(new Vector2f(column, row));
     }
 
 /** Clears the array of the adjacency list*/
-    void removeAdjacentTiles() {
+public void removeAdjacentTiles() {
         adjacentTiles.clear();
     }
 
-/** Returns true if a builder was set on the BOARD OR false otherwise*/
-    boolean isSet() { return set; }
+/** Returns true if a builder was placed on the BOARD OR false otherwise*/
+public boolean isPlaced() { return placed; }
 
 /** Returns a node which the builder is directly attached to  */
     Node getBuilderNode() { return builderNode;  }

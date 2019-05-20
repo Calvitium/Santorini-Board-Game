@@ -33,7 +33,6 @@ public class MenuState extends SantoriniMenuState {
 
         Button online = buttons.addChild(new Button("Online"));
         online.setColor(ColorRGBA.Green);
-
         hotSeat.addClickCommands((Command<Button>) source -> switchToOtherContainer(buttons, playerNumberButtons));
         online.addClickCommands((Command<Button>) source -> {
             stateManager.cleanup();
@@ -46,7 +45,6 @@ public class MenuState extends SantoriniMenuState {
         guiNode.detachChild(previous);
         guiNode.attachChild(present);
     }
-
 
 
 }

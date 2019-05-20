@@ -1,8 +1,11 @@
 package appStates;
 
 import com.jme3.app.SimpleApplication;
+import controler.AppMode;
 import model.Board;
 import model.Player;
+
+import static controler.AppMode.PLAY;
 
 
 public class Game extends SimpleApplication {
@@ -19,6 +22,7 @@ public class Game extends SimpleApplication {
     InGameState inGameState;
 
     //Others
+    public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
     Player[] player;
     private int playerNumber;

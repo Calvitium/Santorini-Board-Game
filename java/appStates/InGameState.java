@@ -10,18 +10,19 @@ import com.jme3.math.Vector3f;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
+import controler.GamePhases;
 import controler.InGameStateListener;
 import model.Builder;
 
 import static appStates.Game.GAME;
+import static controler.GamePhases.SELECTION_PHASE;
 
 public class InGameState extends SantoriniState {
     private Builder selectedBuilder; //a builder, who was chosen by a players to make his turn
     public static int active; // players[active] is the one whose turn is currently considered
-    public static int roundPhase;
-    public static final int SELECTION_PHASE = 0;
-    public static final int MOVEMENT_PHASE = 1;
-    public static final int BUILDING_PHASE = 2;
+
+    
+    public static GamePhases roundPhase;
     private TextField turnPanel;
     private InGameStateListener actionListener;
 
@@ -53,13 +54,13 @@ public class InGameState extends SantoriniState {
     public void update(float fpt) {
         switch (roundPhase)
         {
-            case 0:
+            case SELECTION_PHASE:
                 turnPanel.setText("Player " + (active + 1) + "'s turn." + '\n' + "Select one of your builders");
                 break;
-            case 1:
+            case MOVEMENT_PHASE:
                 turnPanel.setText("Player " + (active + 1) + "'s turn." + '\n' + "Choose where you want to move");
                 break;
-            case 2:
+            case BUILDING_PHASE:
                 turnPanel.setText("Player " + (active + 1) + "'s turn." + '\n' + " Choose the tile on which you want to build.");
                 break;
 
