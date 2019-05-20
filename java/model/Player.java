@@ -24,12 +24,19 @@ public class Player {
         this.buildersNode = new Node("BuildersNode");
         this.male = new Builder(GAME.getAssetManager(), color);
         this.female = new Builder(GAME.getAssetManager(), color);
-        //this.rules = new BasicRules();
+        this.rules = new BasicRules();
         GAME.getRootNode().attachChild(buildersNode);
-        rules = new BasicRules();
     }
 
-/** Returns true if male/female builder of a players was set OR false if not */
+    public Player(Player player) {
+        this.male = player.male;
+        this.female = player.female;
+        this.buildersNode = player.getBuildersNode();
+        this.rules = new BasicRules();
+        GAME.getRootNode().attachChild(buildersNode);
+    }
+
+    /** Returns true if male/female builder of a players was set OR false if not */
     public boolean isBuilderSet(Builder builder) {
     return builder.isPlaced();
 }

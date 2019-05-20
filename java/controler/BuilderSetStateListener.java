@@ -31,7 +31,6 @@ public class BuilderSetStateListener extends SantoriniActionListener {
 
             if (allBuildersSet())
                 stateManager.detach(santoriniState);
-
         }
     }
 
@@ -57,7 +56,7 @@ public class BuilderSetStateListener extends SantoriniActionListener {
     }
 
     private boolean allBuildersSet() {
-        return buildersCount == 2 * players.length;
+        return (buildersCount == 2 * players.length && players.length < 4) || (players.length == 4 && buildersCount == 4);
     }
 
     private boolean mousePointsBoardTile() {
