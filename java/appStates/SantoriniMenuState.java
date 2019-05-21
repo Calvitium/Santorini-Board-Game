@@ -27,8 +27,14 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     float windowHeight, windowWidth;
     float tabHeight, tabWidth;
     Container buttons;
-    private Container myWindow;
+    Container returnContainer;
     Container playerNumberButtons;
+    Button exitButton;
+    Button returnButton;
+
+    public abstract void createButtons();
+
+    public abstract void createReturnButton();
 
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
@@ -44,6 +50,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         tabHeight = windowHeight / 3;
         createBackground();
         createButtons();
+        createReturnButton();
         createPlayerNumberButtons();
     }
 
@@ -63,15 +70,14 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         background.setTexture(assetManager.loadTexture("Textures/Textures/Backgroundd.png"));
 
         // Create a simple container for our elements
-        myWindow = new Container();
+        Container myWindow = new Container();
         myWindow.setBackground(background);
         myWindow.setPreferredSize(new Vector3f(windowWidth, windowHeight, 0.0f));
         guiNode.attachChild(myWindow);
         myWindow.setLocalTranslation(0f, windowHeight, 0);
     }
 
-    public abstract void createButtons();
-    public void createPlayerNumberButtons() {
+    private void createPlayerNumberButtons() {
         playerNumberButtons = new Container();
         playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
         playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
@@ -86,15 +92,12 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
         Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
         newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands(new Command<Button>() {
-            @Override
-            public void execute(Button source) {
-                GAME.setPlayerNumber(numberOfPlayers);
-                stateManager.cleanup();
-                stateManager.attach(GAME.initializationState);
-                stateManager.detach(GAME.menuState);
+        newButton.addClickCommands((Command<Button>) source -> {
+            GAME.setPlayerNumber(numberOfPlayers);
+            stateManager.cleanup();
+            stateManager.attach(GAME.initializationState);
+            stateManager.detach(GAME.menuState);
 
-            }
         });
     }
 }
