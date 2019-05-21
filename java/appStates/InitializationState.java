@@ -10,6 +10,7 @@ import view.Scene;
 
 import static appStates.Game.GAME;
 import static model.Board.BOARD;
+import static appStates.MultiPlayerLobbyState.client;
 
 
 class InitializationState extends SantoriniState {
@@ -18,11 +19,19 @@ class InitializationState extends SantoriniState {
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
         super.initialize(stateManager, application);
+        if(GAME.getIsMultiMode())
+            if(!client.isHost())
+            {
+                GAME.setPlayerNumber(client.askForPlayerCount());
+            }
         setClassFields();
         setTeamColors();
         new Scene(assetManager, rootNode, viewPort);
         new CameraControl(cam, BOARD.boardCentre(), inputManager);
-        moveToBuilderSetState();
+        if(GAME.getIsMultiMode())
+            moveToBuilderSetStateMulti();
+        else
+            moveToBuilderSetState();
     }
 
     private void setTeamColors() {
@@ -51,6 +60,12 @@ class InitializationState extends SantoriniState {
 
     }
 
-    private void moveToBuilderSetState(){ stateManager.attach(GAME.builderSetState); }
-
+    private void moveToBuilderSetState(){
+        stateManager.attach(GAME.builderSetState);
+        stateManager.detach(this);
+    }
+    private void moveToBuilderSetStateMulti(){
+        stateManager.attach(new BuilderSetStateMulti());
+        stateManager.detach(this);
+    }
 }

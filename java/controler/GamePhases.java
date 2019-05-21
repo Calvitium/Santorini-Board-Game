@@ -1,18 +1,18 @@
 package controler;
 
-public enum GamePhases { SELECTION_PHASE(1), MOVEMENT_PHASE(2), BUILDING_PHASE(3);
+public enum GamePhases { PLACEMENT_PHASE("P"), SELECTION_PHASE("S"), MOVEMENT_PHASE("M"), BUILDING_PHASE("B"), WIN_CONDITION("W");
 
-    private int phaseID;
+    private String phaseID;
 
-    GamePhases(int PhaseID) {
+    GamePhases(String PhaseID) {
         this.phaseID = PhaseID;
     }
 
-    int getPhaseID() {
+    String getPhaseID() {
         return phaseID;
     }
 
     public boolean equals( GamePhases roundPhase) {
-        return roundPhase.getPhaseID() == phaseID;
+        return roundPhase.getPhaseID().equals(phaseID);
     }
 }

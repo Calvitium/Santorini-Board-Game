@@ -5,9 +5,14 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import model.Builder;
 import model.Player;
 
+import static appStates.InGameState.roundPhase;
+import static appStates.BuilderSetStateMulti.builderCounter;
 import static model.Board.BOARD;
+import static appStates.Game.GAME;
+import static appStates.MultiPlayerLobbyState.client;
 
 public class BuilderSetStateListener extends SantoriniActionListener {
 
@@ -43,16 +48,35 @@ public class BuilderSetStateListener extends SantoriniActionListener {
                         currentPlayer.attachBuilder(currentPlayer.male, column, row);
                         builderWasSet = true;
                         buildersCount++;
+
+                        if(GAME.getIsMultiMode())
+                        {
+                            client.sendUpdates( createInfoBuffer('M',column,row));
+                            builderCounter++;
+                        }
                         break;
                     } else if (!currentPlayer.isBuilderSet(currentPlayer.female)) {
                         currentPlayer.attachBuilder(currentPlayer.female, column, row);
                         builderWasSet = true;
                         buildersCount++;
+                        if(GAME.getIsMultiMode()){
+                            client.sendUpdates( createInfoBuffer('F',column,row));
+                            builderCounter++;
+                        }
                         break;
                     }
                 }
             if (builderWasSet) break;
         }
+    }
+    private String createInfoBuffer(char sex,int column,int row) {
+        String infoBuffer = "";
+        infoBuffer += 'P';
+        infoBuffer += sex;
+        infoBuffer += column;
+        infoBuffer += row;
+        return infoBuffer;
+
     }
 
     private boolean allBuildersSet() {

@@ -5,6 +5,9 @@ import controler.AppMode;
 import model.Board;
 import model.Player;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
 import static controler.AppMode.PLAY;
 
 
@@ -26,6 +29,7 @@ public class Game extends SimpleApplication {
     public static final Game GAME = new Game();
     Player[] player;
     private int playerNumber;
+    private boolean isMultiMode = false;
 
 
     @Override
@@ -37,9 +41,10 @@ public class Game extends SimpleApplication {
     {
         return playerNumber;
     }
-
     void setPlayerNumber(int n)
     {
         playerNumber = n;
     }
+    public boolean getIsMultiMode(){return isMultiMode;}
+    public void setIsMultiMode(boolean isMultiMode){ this.isMultiMode = isMultiMode;}
 }

@@ -78,7 +78,7 @@ public class BuilderSetState extends SantoriniState {
     }
 
     private void createPhantomBuilder() {
-        phantomBuilder = new Builder(assetManager, "White");
+        phantomBuilder = new Builder(assetManager, "White", "M");
         rootNode.attachChild(phantomBuilder.getBuilderModel());
     }
 
@@ -94,7 +94,7 @@ public class BuilderSetState extends SantoriniState {
         GAME.getGuiNode().attachChild(textContainer);
     }
 
-    private void updatePhantomBuilderPosition() {
+    void updatePhantomBuilderPosition() {
         for (int column = 0; column < 5; column++)
             for (int row = 0; row < 5; row++)
                 if (isTileOccupable(column, row))
@@ -110,7 +110,7 @@ public class BuilderSetState extends SantoriniState {
                !BOARD.getTile(column, row).isCompleted() ;
     }
 
-    private boolean cursorPointsBoardTile() {
+    boolean cursorPointsBoardTile() {
         CollisionResults results = new CollisionResults();
         Vector2f click2d = inputManager.getCursorPosition().clone();
         Vector3f click3d = cam.getWorldCoordinates(click2d, 0f).clone();
