@@ -22,8 +22,8 @@ public class Player {
     public Player(String color) {
     // 1. preliminary initialization
         this.buildersNode = new Node("BuildersNode");
-        this.male = new Builder(GAME.getAssetManager(), color);
-        this.female = new Builder(GAME.getAssetManager(), color);
+        this.male = new Builder(GAME.getAssetManager(), color, "M");
+        this.female = new Builder(GAME.getAssetManager(), color, "F");
         this.rules = new BasicRules();
         GAME.getRootNode().attachChild(buildersNode);
     }

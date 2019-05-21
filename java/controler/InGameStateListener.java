@@ -9,11 +9,14 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import model.Builder;
 import model.showTilesMode;
+
 import static appStates.InGameState.active;
 import static appStates.InGameState.roundPhase;
 import static controler.GamePhases.BUILDING_PHASE;
 import static controler.GamePhases.MOVEMENT_PHASE;
 import static controler.GamePhases.SELECTION_PHASE;
+import static java.lang.Integer.parseInt;
+import static java.lang.System.exit;
 import static model.Board.BOARD;
 
 public class InGameStateListener extends SantoriniActionListener {
@@ -24,7 +27,6 @@ public class InGameStateListener extends SantoriniActionListener {
 
     public InGameStateListener(InGameState inGameState) {
         super(inGameState);
-
     }
 
     @Override
@@ -35,25 +37,77 @@ public class InGameStateListener extends SantoriniActionListener {
         if (noBuilderYetSelected() && cursorPointsBuilder()) {
 
             if (playerSwitchesBetweenBuilders())
-                    removeTilesAvailableForPreviousBuilder();
+                removeTilesAvailableForPreviousBuilder();
             selectBuilderToMove();
-        }
-
-        else if (playerChangedHisMindWhileSelecting())
+        } else if (playerChangedHisMindWhileSelecting())
             cancelSelectedBuilder();
 
         else if (isMovingBuilderPossible()) {
             players[active].moveBuilder(cursorRay, results, selectedBuilder);
             if (selectedBuilder.hasMoved()) {
                 checkWinCondition();
+                //sendBufferWithInfo();
                 goToBuildingPhase();
             }
-        }
-        else if (isBuildingPossible()) {
-            players[active].orderBuild( cursorRay, results, selectedBuilder);
-            if (selectedBuilder.hasBuilt())
+        } else if (isBuildingPossible()) {
+            players[active].orderBuild(cursorRay, results, selectedBuilder);
+            if (selectedBuilder.hasBuilt()) {
+                //send
                 endPlayersTurn();
+            }
         }
+    }
+
+    private void sendInfoBuffer(Builder selectedBuilder) {
+        String infoBuffer = "";
+        infoBuffer += roundPhase.getPhaseID();
+        infoBuffer += selectedBuilder.getSex();
+        infoBuffer += selectedBuilder.getColumn();
+        infoBuffer += selectedBuilder.getRow();
+
+    }
+
+    private void readInfoBuffer(String infoBuffer) {
+        switch (infoBuffer.charAt(0)) //handles info of which phase should be considered;
+        {
+            case 'M':
+                executeOthersMovementPhase(infoBuffer);
+                break;
+            case 'B':
+                executeOthersBuildingPhase(infoBuffer);
+                break;
+            case 'W':
+                executeOthersWinCondition(infoBuffer);
+                break;
+        }
+
+    }
+
+    private void executeOthersWinCondition(String infoBuffer) {
+        System.out.print("Player " + active + " WINS!!!!!!!!!!!!!!!!!!!");
+        exit(1);
+    }
+
+    private void executeOthersBuildingPhase(String infoBuffer) {
+        char sex = infoBuffer.charAt(1);
+        int column = parseInt(infoBuffer.substring(2, 2));
+        int row = parseInt(infoBuffer.substring(3, 3));
+
+        if (sex == 'M')
+            players[active].getRules().buildOnSelectedTile(BOARD.getTile(column, row), players[active].male);
+        else if (sex == 'F')
+            players[active].getRules().buildOnSelectedTile(BOARD.getTile(column, row), players[active].female);
+    }
+
+    private void executeOthersMovementPhase(String infoBuffer) {
+        char sex = infoBuffer.charAt(1);
+        int column = parseInt(infoBuffer.substring(2, 2));
+        int row = parseInt(infoBuffer.substring(3, 3));
+
+        if (sex == 'M')
+        players[active].getRules().moveToSelectedTile(players[active].male, BOARD.getTile(column, row));
+        else if (sex == 'F')
+        players[active].getRules().moveToSelectedTile(players[active].female, BOARD.getTile(column, row));
     }
 
 
@@ -84,12 +138,12 @@ public class InGameStateListener extends SantoriniActionListener {
     private void checkWinCondition() {
         if (players[active].isWinAccomplished(selectedBuilder)) {
             System.out.println("Player " + (active + 1) + " WINS!!!!!");
-            System.exit(1);
+            exit(1);
         }
     }
 
     private boolean isMovingBuilderPossible() {
-        return  actionName.equals("moveBuilder") && !adequateKeyPressed && selectedBuilder != null;
+        return actionName.equals("moveBuilder") && !adequateKeyPressed && selectedBuilder != null;
     }
 
     private void cancelSelectedBuilder() {

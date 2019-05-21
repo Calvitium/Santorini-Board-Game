@@ -21,9 +21,9 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
     private Container insertIPTextFields;
     private TextField insertIP;
     private ActionListener actionListener;
-    private String insertedIP = "";
+    public static String insertedIP = "";
     private static Server server;
-    static Client client;
+    public static Client client;
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
@@ -118,7 +118,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 insertedIP = "";
 
             }
-            catch(IOException | NullPointerException e )
+            catch(IOException e)
             {
                 System.out.print("Failed to connect.");
                 insertedIP = "";

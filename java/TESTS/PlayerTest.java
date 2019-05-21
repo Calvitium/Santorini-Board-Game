@@ -1,6 +1,5 @@
 package TESTS;
 
-import com.jme3.math.Vector2f;
 import controler.AppMode;
 import model.Board;
 import model.Floor;
@@ -19,6 +18,7 @@ public class PlayerTest {
         appMode = AppMode.TEST;
         testBoard = Board.getTestInstance();
     }
+
     @Test
     public void whenBuildersAreNotAttachedToTheBoardTheyAreNotSet() {
         Player player = new Player("red");

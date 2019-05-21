@@ -17,7 +17,6 @@ public class MenuState extends SantoriniMenuState {
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
         super.initialize(stateManager, appImp);
-
     }
 
     @Override
@@ -25,7 +24,6 @@ public class MenuState extends SantoriniMenuState {
         buttons = new Container();
         buttons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
         buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-
         guiNode.attachChild(buttons);
 
         Button hotSeat = buttons.addChild(new Button("Hot seat"));

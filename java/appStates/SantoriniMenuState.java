@@ -27,7 +27,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     float windowHeight, windowWidth;
     float tabHeight, tabWidth;
     Container buttons;
-    Container myWindow;
+    private Container myWindow;
     Container playerNumberButtons;
 
     @Override

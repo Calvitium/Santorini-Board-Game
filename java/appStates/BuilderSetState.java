@@ -78,7 +78,7 @@ public class BuilderSetState extends SantoriniState {
     }
 
     private void createPhantomBuilder() {
-        phantomBuilder = new Builder(assetManager, "White");
+        phantomBuilder = new Builder(assetManager, "White", "M");
         rootNode.attachChild(phantomBuilder.getBuilderModel());
     }
 

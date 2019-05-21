@@ -5,6 +5,9 @@ import controler.AppMode;
 import model.Board;
 import model.Player;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
 import static controler.AppMode.PLAY;
 
 
