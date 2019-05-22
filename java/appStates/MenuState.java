@@ -9,6 +9,7 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 
 import static appStates.Game.GAME;
+import static java.lang.System.exit;
 
 
 public class MenuState extends SantoriniMenuState {
@@ -39,9 +40,34 @@ public class MenuState extends SantoriniMenuState {
         });
     }
 
+    @Override
+    public void createReturnButton() {
+        returnContainer = new Container();
+        returnContainer.setPreferredSize(new Vector3f(75, 37, 0.0f));
+        returnContainer.setLocalTranslation(windowWidth-100, windowHeight-50, 0);
+        guiNode.attachChild(returnContainer);
+
+        exitButton = returnContainer.addChild(new Button("EXIT"));
+        exitButton.setColor(ColorRGBA.Red);
+        exitButton.addClickCommands((Command<Button>) source -> exit(1));
+
+        returnButton = returnContainer.addChild(new Button("BACK"));
+        returnButton.setColor(ColorRGBA.Red);
+        returnButton.addClickCommands((Command<Button>) source -> switchToOtherContainer(playerNumberButtons, buttons));
+        returnContainer.detachChildAt(1);
+    }
+
     private void switchToOtherContainer(Container previous, Container present) {
         guiNode.detachChild(previous);
         guiNode.attachChild(present);
+        if(previous == buttons) {
+            returnContainer.detachChildAt(0);
+            returnContainer.addChild(returnButton);
+        }
+        else if(previous == playerNumberButtons) {
+            returnContainer.detachChildAt(1);
+           returnContainer.attachChildAt(exitButton, 0);
+        }
     }
 
 

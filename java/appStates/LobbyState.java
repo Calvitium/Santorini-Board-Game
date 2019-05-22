@@ -53,6 +53,12 @@ public class LobbyState extends SantoriniMenuState{
         guiNode.attachChild(buttons);
 
     }
+
+    @Override
+    public void createReturnButton() {
+
+    }
+
     private void moveToInitialization()
     {
         stateManager.attach(GAME.initializationState);
