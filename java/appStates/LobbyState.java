@@ -40,7 +40,10 @@ public class LobbyState extends SantoriniMenuState{
     public void update(float tpf) {
         updatePlayerList();
         if(client.checkIfGameStarted() == true)
+        {
+            GAME.setIsMultiMode(true);
             moveToInitialization();
+        }
     }
     @Override
     public void createButtons() {

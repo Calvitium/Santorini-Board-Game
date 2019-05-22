@@ -27,6 +27,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     float windowHeight, windowWidth;
     float tabHeight, tabWidth;
     Container buttons;
+    private Container myWindow;
     Container returnContainer;
     Container playerNumberButtons;
     Button exitButton;
@@ -67,7 +68,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         // Set 'glass' as the default style when not specified
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
         QuadBackgroundComponent background = new QuadBackgroundComponent();
-        background.setTexture(assetManager.loadTexture("Textures/Textures/Backgroundd.png"));
+        background.setTexture(assetManager.loadTexture("Textures/Textures/Sand.jpg"));
 
         // Create a simple container for our elements
         Container myWindow = new Container();

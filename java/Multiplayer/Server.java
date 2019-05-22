@@ -44,7 +44,7 @@ public class Server extends  Thread{
                 clientNumber++;
                 out.writeUTF("Connection achieved");
 
-                activeSockets.addLast(new ClientHandler(clientSocket, in, out));
+                activeSockets.addLast(new ClientHandler(clientSocket, in, out,clientNumber-1));
                 Thread thread = activeSockets.getLast();
                 thread.start();
             }
@@ -76,19 +76,22 @@ public class Server extends  Thread{
         private final DataOutputStream dos;
         private final Socket socket;
         private boolean isInGame = false;
+        private boolean isActive = false;
+        private String bufferToBroadcast ="";
+        private final int clientIndex;
+        private boolean turnPhase = true; // true is finished turn false - the turn is halfway through
 
 
         // Constructor
-        ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) {
+        ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos,int clientIndex) {
             this.socket = s;
             this.dis = dis;
             this.dos = dos;
+            this.clientIndex = clientIndex;
         }
 
         @Override
         public void run() {
-
-
             while (true) {
                 try {
                     if(!checkIfAlive())
@@ -96,35 +99,70 @@ public class Server extends  Thread{
                     String received = dis.readUTF();
 
                     switch(received) {
-                        case "ByeBye":
+                        case "CloseClient": // Client is disconnected from the server
                             activeSockets.remove(socket);
                             clientNumber--;
                             break;
-                        case "CloseServer":
+                        case "CloseServer": // Host left the server
                             serverSocket.close();
                             clientNumber = 0;
                             activeSockets.clear();
                             return;
-                        case "Acknowledge":
+                        case "Acknowledge": // Client asks to be accepted
                             System.out.println(socket + " is connected to server");
                             break;
-                        case "HasTheGameStarted":
+                        case "GiveMeAnIndex": //Client asks the server for an Index in in the players array
+                            dos.writeInt(clientIndex);
+                            break;
+
+                        case "HasTheGameStarted": // Client asks whether the game has started
                             if(isInGame == true)
                                 dos.writeBoolean(true);
                             else
                                 dos.writeBoolean(false);
                             break;
-                        case "TriggerGame":
+                        case "TriggerGame": // Host orders the Game to start
                             for(int i=0;i<clientNumber;i++)
                             {
-                                //activeSockets.get(i).dos.writeUTF("InitGame");
                                 activeSockets.get(i).isInGame = true;
                             }
                             break;
-                        case "PlayerCount":
+                        case "InitOrder": // Host orders the Server to initialize synchronization rules
+                            activeSockets.getFirst().isActive = true;
+                            break;
+                        case "Updates": // Clients asks what other clients have made.
+                            turnPhase=!turnPhase;
+                            String buffer = dis.readUTF();
+                            for(int i=0;i<clientNumber;i++)
+                            {
+                                if(!activeSockets.get(i).isActive)
+                                {
+                                    activeSockets.get(i).bufferToBroadcast = buffer;
+                                }
+                            }
+                            if(turnPhase == true) {
+                                isActive = false;
+                                activeSockets.get((clientIndex+1)%clientNumber).isActive= true;
+                            }
+                            break;
+                        case "WereUpdatesMade": // Client asks whether there are any updates to be made
+                            if(!bufferToBroadcast.isEmpty())
+                            {
+                                dos.writeUTF("Yes");
+                            }
+                            else
+                            {
+                                dos.writeUTF("No");
+                            }
+                            break;
+                        case "SendTheUpdates":
+                            dos.writeUTF(bufferToBroadcast);
+                            bufferToBroadcast = "";
+                            break;
+                        case "PlayerCount": // Client asks for the player count
                             dos.writeInt(clientNumber);
                             break;
-                        case "I need player list":
+                        case "I need player list": // Client asks for the player list
                             String toSend = "";
                             for(int i=0;i<clientNumber;i++)
                             {
@@ -156,7 +194,6 @@ public class Server extends  Thread{
         }
         private boolean checkIfAlive() { return !socket.isClosed(); }
     }
-
     private LinkedList<ClientHandler> getActiveSockets()
     {
         return activeSockets;

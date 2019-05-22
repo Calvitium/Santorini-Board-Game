@@ -5,9 +5,14 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import model.Builder;
 import model.Player;
 
+
+import static appStates.BuilderSetStateMulti.*;
 import static model.Board.BOARD;
+import static appStates.Game.GAME;
+import static appStates.MultiPlayerLobbyState.client;
 
 public class BuilderSetStateListener extends SantoriniActionListener {
 
@@ -22,15 +27,16 @@ public class BuilderSetStateListener extends SantoriniActionListener {
 
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
+        if(!(GAME.getIsMultiMode() && (clientIndex != activePlayer))) {
+            updateActionFlags(name, keyPressed);
 
-        updateActionFlags(name, keyPressed);
+             for (Player currentPlayer : players) {
+                if (mousePointsBoardTile() && canSetBuilder())
+                    setBuilderOnTheBoard(currentPlayer);
 
-        for (Player currentPlayer : players) {
-            if (mousePointsBoardTile() && canSetBuilder())
-                setBuilderOnTheBoard(currentPlayer);
-
-            if (allBuildersSet())
-                stateManager.detach(santoriniState);
+                if (allBuildersSet())
+                    stateManager.detach(santoriniState);
+            }
         }
     }
 
@@ -43,16 +49,35 @@ public class BuilderSetStateListener extends SantoriniActionListener {
                         currentPlayer.attachBuilder(currentPlayer.male, column, row);
                         builderWasSet = true;
                         buildersCount++;
+
+                        if(GAME.getIsMultiMode())
+                        {
+                            client.sendUpdates( createInfoBuffer('M',column,row));
+                            builderCounter++;
+                        }
                         break;
                     } else if (!currentPlayer.isBuilderSet(currentPlayer.female)) {
                         currentPlayer.attachBuilder(currentPlayer.female, column, row);
                         builderWasSet = true;
                         buildersCount++;
+                        if(GAME.getIsMultiMode()){
+                            client.sendUpdates( createInfoBuffer('F',column,row));
+                            builderCounter++;
+                        }
                         break;
                     }
                 }
             if (builderWasSet) break;
         }
+    }
+    private String createInfoBuffer(char sex,int column,int row) {
+        String infoBuffer = "";
+        infoBuffer += 'P';
+        infoBuffer += sex;
+        infoBuffer += column;
+        infoBuffer += row;
+        return infoBuffer;
+
     }
 
     private boolean allBuildersSet() {
