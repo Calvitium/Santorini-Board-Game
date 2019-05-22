@@ -1,6 +1,6 @@
 package controler;
 
-import appStates.InGameState;
+import appStates.singleplayerStates.InGameState;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -10,8 +10,8 @@ import com.jme3.math.Vector3f;
 import model.Builder;
 import model.showTilesMode;
 
-import static appStates.InGameState.active;
-import static appStates.InGameState.roundPhase;
+import static appStates.singleplayerStates.InGameState.active;
+import static appStates.singleplayerStates.InGameState.roundPhase;
 import static controler.GamePhases.BUILDING_PHASE;
 import static controler.GamePhases.MOVEMENT_PHASE;
 import static controler.GamePhases.SELECTION_PHASE;

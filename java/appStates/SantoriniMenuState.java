@@ -14,27 +14,26 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
-import com.simsilica.lemur.core.GuiComponent;
 import com.simsilica.lemur.style.BaseStyles;
 
 import static appStates.Game.GAME;
 
 public abstract class SantoriniMenuState extends AbstractAppState {
-    Node guiNode;
-    AssetManager assetManager;
-    AppStateManager stateManager;
-    InputManager inputManager;
-    float windowHeight, windowWidth;
-    float tabHeight, tabWidth;
-    Container buttons;
-    Container returnContainer;
-    Container playerNumberButtons;
-    Button exitButton;
-    Button returnButton;
+    protected Node guiNode;
+    protected AssetManager assetManager;
+    protected AppStateManager stateManager;
+    protected InputManager inputManager;
+    protected float windowHeight, windowWidth;
+    protected float tabHeight, tabWidth;
+    protected Container buttons;
+    protected Container returnContainer;
+    protected Container playerNumberButtons;
+    protected Button exitButton;
+    protected Button returnButton;
 
     public abstract void createButtons();
 
-    public abstract void createReturnButton();
+    protected abstract void createReturnButton();
 
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
@@ -89,15 +88,10 @@ public abstract class SantoriniMenuState extends AbstractAppState {
 
     }
 
-    public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
-        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
-        newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands((Command<Button>) source -> {
-            GAME.setPlayerNumber(numberOfPlayers);
-            stateManager.cleanup();
-            stateManager.attach(GAME.initializationState);
-            stateManager.detach(GAME.menuState);
-
-        });
+    protected void switchState(SantoriniMenuState menuState) {
+        stateManager.cleanup();
+        stateManager.detach(this);
+        stateManager.attach(menuState);
     }
+    public abstract void createPlayerButton(int numberOfPlayers, Container playerNumberButtons);
 }

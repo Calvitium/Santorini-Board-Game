@@ -27,51 +27,9 @@ public interface PlayerCreator {
             Gods randomGod = Gods.getRandomGod();
             switch (randomGod)
             {
-                case Pan:
-                    System.out.println("Player " + (i+1)+ " is Pan.");
-                    ((Game) app).players[i] = new Player(((Game) app), playerColor) {
-
-                        int previousHeight = 0;
-                        @Override
-                        public void move(Board BOARD, Ray ray, CollisionResults results, Builder selected) {
-                            previousHeight = selected.getFloorLvl().height;
-                            super.move(BOARD, ray, results, selected);
-
-                        }
-                        @Override
-                        public boolean isWinAccomplished(Builder builder) {
-                            return ((previousHeight - builder.getFloorLvl().height >= 2) || builder.getFloorLvl() == Floor.SECOND);
-                        }
-
-                    };
-                    break;
-
-                case Chronos:
-                    System.out.println("Player " +( i+1)+ " is Chronos.");
-                    ((Game) app).players[i] = new Player(((Game) app), playerColor) {
 
 
-                        @Override
-                        public boolean isWinAccomplished(Builder builder) {
-                            return builder.getFloorLvl().equals(Floor.SECOND) || calculateNumberOfTowers() >= 5;
-                        }
 
-                        int calculateNumberOfTowers() {
-                            int towersCount = 0;
-                            for(int i =0;i<5;i++)
-                            {
-                                for(int j =0;j<5;j++)
-                                {
-                                    if(BOARD.getTile(i,j).getHeight().height==4)
-                                        towersCount++;
-                                }
-                            }
-                            return  towersCount;
-
-                        }
-
-                    };
-                    break;
                 case Artemis:
                     System.out.println("Player " + (i+1)+ " is Artemis.");
                     ((Game) app).players[i] = new Player(((Game) app), playerColor) {

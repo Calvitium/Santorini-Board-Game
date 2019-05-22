@@ -16,6 +16,8 @@ import static model.Board.BOARD;
 
 public class BasicRules {
 
+    String godName = "";
+
     public void move(Ray ray, CollisionResults results, Builder selected) {
         BOARD.getBoardNode().collideWith(ray, results); // Cursor is going to collide with BOARD tiles
         if(results.size() > 0) // cursor collided with the BOARD
@@ -96,5 +98,9 @@ public class BasicRules {
     public boolean isWinAccomplished(Builder builder)
     {
         return builder.getFloorLvl().equals(Floor.SECOND);
+    }
+
+    public String getName() {
+        return godName;
     }
 }

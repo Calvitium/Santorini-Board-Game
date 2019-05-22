@@ -1,12 +1,13 @@
 package appStates;
 
+import appStates.multiplayerStates.MultiPlayerLobbyState;
+import appStates.singleplayerStates.BuilderSetState;
+import appStates.singleplayerStates.InGameState;
+import appStates.singleplayerStates.InitializationState;
+import appStates.singleplayerStates.MainMenuState;
 import com.jme3.app.SimpleApplication;
 import controler.AppMode;
-import model.Board;
 import model.Player;
-
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 
 import static controler.AppMode.PLAY;
 
@@ -18,29 +19,33 @@ public class Game extends SimpleApplication {
     }
 
     //States
-    static MenuState menuState = new MenuState();
-    static InitializationState initializationState = new InitializationState();
-    static BuilderSetState builderSetState = new BuilderSetState();
-    static MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
-    static InGameState inGameState;
+     public MainMenuState mainMenuState = new MainMenuState();
+     public InitializationState initializationState = new InitializationState();
+     public BuilderSetState builderSetState = new BuilderSetState();
+     public MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
+     public InGameState inGameState;
 
     //Others
     public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
-    static Player[] player;
-    private int playerNumber;
+    public static Player[] players;
 
+
+    private Game(){
+        super();
+    }
 
     @Override
     public void simpleInitApp() {
-        stateManager.attach(menuState);
+        stateManager.attach(mainMenuState);
     }
 
-    int getPlayerNumber() {
-        return playerNumber;
+    public void setPlayerNumber(int n) {
+        players = new Player[n];
     }
 
-    void setPlayerNumber(int n) {
-        playerNumber = n;
+    public int getPlayerNumber() {
+        return players.length;
     }
+
 }

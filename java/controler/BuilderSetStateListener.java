@@ -1,6 +1,6 @@
 package controler;
 
-import appStates.BuilderSetState;
+import appStates.singleplayerStates.BuilderSetState;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;

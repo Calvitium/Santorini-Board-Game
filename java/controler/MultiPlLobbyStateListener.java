@@ -1,7 +1,7 @@
 package controler;
 
 import com.jme3.input.controls.ActionListener;
-import static appStates.MultiPlayerLobbyState.insertedIP;
+import static appStates.multiplayerStates.MultiPlayerLobbyState.insertedIP;
 
 
 
