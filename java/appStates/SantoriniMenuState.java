@@ -23,15 +23,20 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     protected AssetManager assetManager;
     protected AppStateManager stateManager;
     protected InputManager inputManager;
-    protected float windowHeight, windowWidth;
-    protected float tabHeight, tabWidth;
     protected Container buttons;
     protected Container returnContainer;
     protected Container playerNumberButtons;
     protected Button exitButton;
     protected Button returnButton;
+    protected float windowHeight, windowWidth;
+    protected float tabHeight, tabWidth;
 
-    public abstract void createButtons();
+    public void createButtons() {
+        buttons = new Container();
+        buttons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
+        buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
+        guiNode.attachChild(buttons);
+    }
 
     protected abstract void createReturnButton();
 
@@ -50,7 +55,6 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         createBackground();
         createButtons();
         createReturnButton();
-        createPlayerNumberButtons();
     }
 
     @Override
@@ -76,22 +80,9 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         myWindow.setLocalTranslation(0f, windowHeight, 0);
     }
 
-    private void createPlayerNumberButtons() {
-        playerNumberButtons = new Container();
-        playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-
-        createPlayerButton(2, playerNumberButtons);
-        createPlayerButton(3, playerNumberButtons);
-        createPlayerButton(4, playerNumberButtons);
-
-
-    }
-
     protected void switchState(SantoriniMenuState menuState) {
         stateManager.cleanup();
         stateManager.detach(this);
         stateManager.attach(menuState);
     }
-    public abstract void createPlayerButton(int numberOfPlayers, Container playerNumberButtons);
 }

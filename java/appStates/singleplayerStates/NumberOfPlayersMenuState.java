@@ -10,7 +10,6 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 
 import static appStates.Game.GAME;
-import static java.lang.System.exit;
 
 public class NumberOfPlayersMenuState extends SantoriniMenuState {
 
@@ -21,13 +20,19 @@ public class NumberOfPlayersMenuState extends SantoriniMenuState {
 
     @Override
     public void createButtons() {
-        playerNumberButtons = new Container();
-        playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
+        super.createButtons();
+        createPlayerButton(2, buttons);
+        createPlayerButton(3, buttons);
+        createPlayerButton(4, buttons);
+    }
 
-        createPlayerButton(2, playerNumberButtons);
-        createPlayerButton(3, playerNumberButtons);
-        createPlayerButton(4, playerNumberButtons);
+    public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
+        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
+        newButton.setColor(ColorRGBA.Green);
+        newButton.addClickCommands((Command<Button>) source -> {
+            GAME.setPlayerNumber(numberOfPlayers);
+            switchState(GAME.rulesSelectionMenuState);
+        });
     }
 
     @Override
@@ -43,14 +48,6 @@ public class NumberOfPlayersMenuState extends SantoriniMenuState {
         returnButton.addClickCommands((Command<Button>) source -> switchState(GAME.mainMenuState));
     }
 
-    @Override
-    public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
-        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
-        newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands((Command<Button>) source -> {
-            GAME.setPlayerNumber(numberOfPlayers);
-        });
-    }
 
 
 }

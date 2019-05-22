@@ -1,10 +1,7 @@
 package appStates;
 
-import appStates.multiplayerStates.MultiPlayerLobbyState;
-import appStates.singleplayerStates.BuilderSetState;
-import appStates.singleplayerStates.InGameState;
-import appStates.singleplayerStates.InitializationState;
-import appStates.singleplayerStates.MainMenuState;
+import appStates.multiplayerStates.*;
+import appStates.singleplayerStates.*;
 import com.jme3.app.SimpleApplication;
 import controler.AppMode;
 import model.Player;
@@ -18,11 +15,21 @@ public class Game extends SimpleApplication {
         GAME.start();
     }
 
-    //States
-     public MainMenuState mainMenuState = new MainMenuState();
+    //MultiplayerMenuStates
+    public MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
+    public HostOrJoinMenuState hostOrJoinMenuState = new HostOrJoinMenuState();
+    public JoinGameMenuState joinGameMenuState = new JoinGameMenuState();
+    public HostGameMenuState hostGameMenuState = new HostGameMenuState();
+    public MultiNumberOfPlayers multiNumberOfPlayers = new MultiNumberOfPlayers();
+    //SingleplayerMenuStates
+    public MainMenuState mainMenuState = new MainMenuState();
+    public NumberOfPlayersMenuState numberOfPlayersMenuState = new NumberOfPlayersMenuState();
+    public RulesSelectionMenuState rulesSelectionMenuState = new RulesSelectionMenuState();
+    //GameplayStates
+
      public InitializationState initializationState = new InitializationState();
      public BuilderSetState builderSetState = new BuilderSetState();
-     public MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
+
      public InGameState inGameState;
 
     //Others
