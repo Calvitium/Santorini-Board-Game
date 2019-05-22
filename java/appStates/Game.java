@@ -18,16 +18,16 @@ public class Game extends SimpleApplication {
     }
 
     //States
-    static MenuState menuState = new MenuState();
-    static InitializationState initializationState = new InitializationState();
-    static BuilderSetState builderSetState = new BuilderSetState();
-    static MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
-    static InGameState inGameState;
+    MenuState menuState = new MenuState();
+    InitializationState initializationState = new InitializationState();
+    BuilderSetState builderSetState = new BuilderSetState();
+    MultiPlayerLobbyState multiPlayerLobbyState  = new MultiPlayerLobbyState();
+    InGameState inGameState;
 
     //Others
     public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
-    static Player[] player;
+    Player[] player;
     private int playerNumber;
     private boolean isMultiMode = false;
 
@@ -37,12 +37,12 @@ public class Game extends SimpleApplication {
         stateManager.attach(menuState);
     }
 
-    int getPlayerNumber() {
+    int getPlayerNumber()
+    {
         return playerNumber;
     }
-
-    void setPlayerNumber(int n) {
-
+    void setPlayerNumber(int n)
+    {
         playerNumber = n;
     }
     public boolean getIsMultiMode(){return isMultiMode;}
