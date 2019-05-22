@@ -8,8 +8,8 @@ import com.jme3.math.Vector3f;
 import model.Builder;
 import model.Player;
 
-import static appStates.InGameState.roundPhase;
-import static appStates.BuilderSetStateMulti.builderCounter;
+
+import static appStates.BuilderSetStateMulti.*;
 import static model.Board.BOARD;
 import static appStates.Game.GAME;
 import static appStates.MultiPlayerLobbyState.client;
@@ -27,15 +27,16 @@ public class BuilderSetStateListener extends SantoriniActionListener {
 
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
+        if(!(GAME.getIsMultiMode() && (clientIndex != activePlayer))) {
+            updateActionFlags(name, keyPressed);
 
-        updateActionFlags(name, keyPressed);
+             for (Player currentPlayer : players) {
+                if (mousePointsBoardTile() && canSetBuilder())
+                    setBuilderOnTheBoard(currentPlayer);
 
-        for (Player currentPlayer : players) {
-            if (mousePointsBoardTile() && canSetBuilder())
-                setBuilderOnTheBoard(currentPlayer);
-
-            if (allBuildersSet())
-                stateManager.detach(santoriniState);
+                if (allBuildersSet())
+                    stateManager.detach(santoriniState);
+            }
         }
     }
 

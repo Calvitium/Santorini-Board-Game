@@ -1,4 +1,4 @@
 package appStates;
 
-public class InGameStateMulti {
+public class InGameStateMulti extends SantoriniState{
 }

@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import model.Player;
 
+import static appStates.Game.GAME;
 import static appStates.InGameState.active;
 import static appStates.MultiPlayerLobbyState.client;
 import static java.lang.Integer.parseInt;
@@ -11,8 +12,8 @@ import static model.Board.BOARD;
 
 
 public class BuilderSetStateMulti extends BuilderSetState {
-    private int clientIndex;
-    private int activePlayer;
+    public static int clientIndex;
+    public static int activePlayer;
     public static int builderCounter=0;
 
     @Override
@@ -27,6 +28,11 @@ public class BuilderSetStateMulti extends BuilderSetState {
     @Override
     public void update(float tpf)
     {
+        if(builderCounter == 2*GAME.getPlayerNumber() )
+        {
+            stateManager.attach(new InGameStateMulti());
+            stateManager.detach(this);
+        }
         if(clientIndex != activePlayer) {
             String updates = client.askForUpdates();
             if(!updates.isEmpty()) {
@@ -34,6 +40,7 @@ public class BuilderSetStateMulti extends BuilderSetState {
                 builderCounter++;
             }
         }
+
 
         if(clientIndex == activePlayer && cursorPointsBoardTile())
             updatePhantomBuilderPosition();
