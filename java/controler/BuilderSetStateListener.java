@@ -5,14 +5,13 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import model.Builder;
 import model.Player;
 
 
-import static appStates.BuilderSetStateMulti.*;
+import static appStates.multiplayerStates.BuilderSetStateMulti.*;
 import static model.Board.BOARD;
 import static appStates.Game.GAME;
-import static appStates.MultiPlayerLobbyState.client;
+import static appStates.multiplayerStates.JoinGameMenuState.client;
 
 public class BuilderSetStateListener extends SantoriniActionListener {
 

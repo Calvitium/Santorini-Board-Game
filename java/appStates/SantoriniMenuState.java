@@ -26,6 +26,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     protected Container buttons;
     protected Container returnContainer;
     protected Container playerNumberButtons;
+    protected Container myWindow;
     protected Button exitButton;
     protected Button returnButton;
     protected float windowHeight, windowWidth;

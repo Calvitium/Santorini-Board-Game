@@ -7,23 +7,21 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import model.Board;
 import model.Builder;
 import model.showTilesMode;
 
 
 
-import static appStates.BuilderSetStateMulti.clientIndex;
-import static appStates.InGameState.active;
-import static appStates.InGameState.roundPhase;
+import static appStates.multiplayerStates.BuilderSetStateMulti.clientIndex;
+import static appStates.singleplayerStates.InGameState.active;
+import static appStates.singleplayerStates.InGameState.roundPhase;
 import static controler.GamePhases.BUILDING_PHASE;
 import static controler.GamePhases.MOVEMENT_PHASE;
 import static controler.GamePhases.SELECTION_PHASE;
-import static java.lang.Integer.parseInt;
 import static java.lang.System.exit;
 import static model.Board.BOARD;
 import static appStates.Game.GAME;
-import static appStates.MultiPlayerLobbyState.client;
+import static appStates.multiplayerStates.JoinGameMenuState.client;
 
 
 public class InGameStateListener extends SantoriniActionListener {
