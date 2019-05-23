@@ -12,7 +12,7 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 
-import static appStates.multiplayerStates.JoinGameMenuState.client;
+import static appStates.multiplayerStates.MultiPlayerLobbyState.client;
 import static appStates.Game.GAME;
 
 
@@ -37,13 +37,14 @@ public class LobbyState extends SantoriniMenuState {
         guiNode.detachAllChildren();
     }
 
-
-
     @Override
     public void update(float tpf) {
         updatePlayerList();
         if(client.checkIfGameStarted() == true)
+        {
+            GAME.setIsMultiMode(true);
             moveToInitialization();
+        }
     }
     @Override
     public void createButtons() {
@@ -53,12 +54,6 @@ public class LobbyState extends SantoriniMenuState {
         guiNode.attachChild(buttons);
 
     }
-
-    @Override
-    public void createReturnButton() {
-
-    }
-
     private void moveToInitialization()
     {
         stateManager.attach(GAME.initializationState);
@@ -106,7 +101,7 @@ public class LobbyState extends SantoriniMenuState {
     private void returnToLastState()
     {
         client.closeConnection(client.isHost());
-        stateManager.attach(GAME.mainMenuState);
+        stateManager.attach(new MultiPlayerLobbyState());
         stateManager.detach(this);
     }
 }

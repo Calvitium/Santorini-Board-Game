@@ -5,8 +5,8 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 
 import static appStates.Game.GAME;
+import static appStates.multiplayerStates.MultiPlayerLobbyState.client;
 import static java.lang.Integer.parseInt;
-import static appStates.multiplayerStates.JoinGameMenuState.client;
 
 
 public class BuilderSetStateMulti extends BuilderSetState {

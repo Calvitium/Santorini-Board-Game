@@ -18,10 +18,11 @@ import static appStates.singleplayerStates.InGameState.roundPhase;
 import static controler.GamePhases.BUILDING_PHASE;
 import static controler.GamePhases.MOVEMENT_PHASE;
 import static controler.GamePhases.SELECTION_PHASE;
+import static java.lang.Integer.parseInt;
 import static java.lang.System.exit;
 import static model.Board.BOARD;
 import static appStates.Game.GAME;
-import static appStates.multiplayerStates.JoinGameMenuState.client;
+import static appStates.multiplayerStates.MultiPlayerLobbyState.client;
 
 
 public class InGameStateListener extends SantoriniActionListener {
