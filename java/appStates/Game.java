@@ -1,5 +1,8 @@
 package appStates;
 
+import appStates.multiplayerStates.HostOrJoinMenuState;
+import appStates.multiplayerStates.JoinGameMenuState;
+import appStates.multiplayerStates.MultiNumberOfPlayers;
 import appStates.singleplayerStates.*;
 import com.jme3.app.SimpleApplication;
 import controler.AppMode;
@@ -47,8 +50,11 @@ public class Game extends SimpleApplication {
     public void setPlayerNumber(int n) {
         players = new Player[n];
     }
-
     public int getPlayerNumber() {
         return players.length;
     }
+
+    public void setIsMultiMode(boolean b) { isMultiMode = b;}
+
+    public boolean getIsMultiMode() { return isMultiMode;}
 }

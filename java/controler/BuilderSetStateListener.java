@@ -11,7 +11,7 @@ import model.Player;
 import static appStates.multiplayerStates.BuilderSetStateMulti.*;
 import static model.Board.BOARD;
 import static appStates.Game.GAME;
-import static appStates.multiplayerStates.MultiPlayerLobbyState.client;
+import static appStates.multiplayerStates.JoinGameMenuState.client;
 
 public class BuilderSetStateListener extends SantoriniActionListener {
 

@@ -12,10 +12,10 @@ import view.Scene;
 
 import static appStates.Game.GAME;
 import static model.Board.BOARD;
-import static appStates.multiplayerStates.MultiPlayerLobbyState.client;
+import static appStates.multiplayerStates.JoinGameMenuState.client;
 
 
-class InitializationState extends SantoriniState {
+public class InitializationState extends SantoriniState {
     private ViewPort viewPort;
 
     @Override
@@ -53,8 +53,8 @@ class InitializationState extends SantoriniState {
     protected void setClassFields(){
         super.setClassFields();
         this.viewPort = GAME.getViewPort();
-        GAME.player = new Player[GAME.getPlayerNumber()];
-        this.players = GAME.player;
+        GAME.players = new Player[GAME.getPlayerNumber()];
+        this.players = GAME.players;
     }
 
     @Override
