@@ -1,5 +1,6 @@
 package appStates.multiplayerStates;
 
+import appStates.Game;
 import appStates.SantoriniMenuState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -20,17 +21,10 @@ import static appStates.Game.GAME;
 
 public class LobbyState extends SantoriniMenuState {
 
-    private Container playerListCont;
     private TextField playerList;
-    private String allPlayers;
+    private TextField ownIP;
 
 
-    @Override
-    public void initialize(AppStateManager stateManager, Application appImp) {
-        super.initialize(stateManager, appImp);
-        createPlayerList();
-        createConnectionButtons();
-    }
     @Override
     public void cleanup() {
         super.cleanup();
@@ -48,11 +42,20 @@ public class LobbyState extends SantoriniMenuState {
     }
     @Override
     public void createButtons() {
-        buttons = new Container();
-        buttons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-        guiNode.attachChild(buttons);
+        super.createButtons();
+        createPlayerList();
+        createConnectionButtons();
+        createIPTextBox();
 
+    }
+
+    private void createIPTextBox() {
+        Container ownIPTextBox = new Container();
+        ownIPTextBox.setPreferredSize(new Vector3f(120, 50, 0.0f));
+        ownIPTextBox.setLocalTranslation(windowWidth - 300, windowHeight - 50,  0);
+        ownIP = ownIPTextBox.addChild(new TextField("Your IP address: \n" + Game.IP_ADDRESS));
+        ownIP.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
+        guiNode.attachChild(ownIPTextBox);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class LobbyState extends SantoriniMenuState {
     }
 
     private void createPlayerList(){
-        playerListCont = new Container();
+        Container playerListCont = new Container();
         playerListCont.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
         playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, 3 * (windowHeight / 2 - tabHeight) + tabHeight / 6, 0);
 
@@ -79,7 +82,7 @@ public class LobbyState extends SantoriniMenuState {
     }
     private void updatePlayerList()
     {
-        allPlayers = client.askForPlayerList();
+        String allPlayers = client.askForPlayerList();
         if(allPlayers.equals(""))
             returnToLastState();
         else
