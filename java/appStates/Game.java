@@ -8,9 +8,6 @@ import com.jme3.app.SimpleApplication;
 import controler.AppMode;
 import model.Player;
 
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-
 import static controler.AppMode.PLAY;
 
 
@@ -40,15 +37,6 @@ public class Game extends SimpleApplication {
     public static final Game GAME = new Game();
     public static Player[] players;
     private boolean isMultiMode = false;
-    public static String IP_ADDRESS;
-
-    static {
-        try {
-            IP_ADDRESS = Inet4Address.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private Game(){

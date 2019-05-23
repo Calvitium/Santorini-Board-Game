@@ -21,11 +21,12 @@ public class MultiNumberOfPlayers extends NumberOfPlayersMenuState {
         newButton.addClickCommands((Command<Button>) source -> {
             GAME.setPlayerNumber(numberOfPlayers);
             server = new Server(6666,GAME.getPlayerNumber());
+            server.setDaemon(true);
             server.start();
             client = new Client("127.0.0.1", 6666,true);
             client.sendAcknowledgement();
-            //client.startClientThread();
-            stateManager.attach(new LobbyState());
+
+            stateManager.attach(GAME.rulesSelectionMenuState);
             stateManager.detach(GAME.multiNumberOfPlayers);
         });
     }

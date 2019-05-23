@@ -1,6 +1,9 @@
 package appStates.singleplayerStates;
 
 import appStates.SantoriniMenuState;
+import appStates.multiplayerStates.LobbyState;
+import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.simsilica.lemur.Button;
@@ -9,11 +12,18 @@ import com.simsilica.lemur.Container;
 import model.Player;
 
 import static appStates.Game.GAME;
+
 import static appStates.Game.players;
 import static gods.ListOfGods.GODS;
 
 public class RulesSelectionMenuState extends SantoriniMenuState {
 
+    @Override
+    public void initialize(AppStateManager stateManager, Application appImp)
+    {
+        super.initialize(stateManager,appImp);
+
+    }
     @Override
     public void createButtons() {
         super.createButtons();
@@ -43,35 +53,30 @@ public class RulesSelectionMenuState extends SantoriniMenuState {
     }
 
     private void setBasicRules() {
-        setTeamColors();
+        createPlayerArray();
         stateManager.cleanup();
         stateManager.detach(GAME.mainMenuState);
-        stateManager.attach(GAME.initializationState);
+        if (GAME.getIsMultiMode())
+            stateManager.attach(new LobbyState());
+        else
+            stateManager.attach(GAME.initializationState);
     }
 
     private void selectPrefferedRules() {
     }
 
     private void setRandomRules() {
-        setTeamColors();
+        createPlayerArray();
         for(Player player : players)
             player.setRules(GODS.getRandomGod());
         stateManager.cleanup();
         stateManager.detach(GAME.mainMenuState);
-        stateManager.attach(GAME.initializationState);
+        if (GAME.getIsMultiMode())
+            stateManager.attach(new LobbyState());
+        else
+            stateManager.attach(GAME.initializationState);
     }
 
-    private void setTeamColors() {
-        String[] teamColors = {"Blue", "Red", "Green"};
-        if(players.length < 4)
-            for(int i = 0; i<players.length; i++)
-                players[i] = new Player(teamColors[i]);
-        else if(players.length == 4) {
-            players[0] = new Player("Blue");
-            players[1] = new Player("Red");
-            players[2] = new Player(players[0]);
-            players[3] = new Player(players[1]);
-        }
-    }
+
 
 }
