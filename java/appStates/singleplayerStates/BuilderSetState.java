@@ -87,8 +87,8 @@ public class BuilderSetState extends SantoriniState {
         QuadBackgroundComponent sth = new QuadBackgroundComponent();
         sth.setTexture(assetManager.loadTexture("Textures/Textures/CobbleRoad.jpg"));
         Container textContainer = new Container();
-        textContainer.setLocalTranslation(0.0f, 100.0f, 0.0f);
-        textContainer.setPreferredSize(new Vector3f(cam.getWidth() / 9, cam.getHeight() / 15, 0.0f));
+        textContainer.setLocalTranslation(40,cam.getHeight() - 40 ,0.0f);
+        textContainer.setPreferredSize(new Vector3f(260,50,0.0f));
         textContainer.setBackground(sth);
         turnPanel = textContainer.addChild(new TextField("Turn indicator"));
         turnPanel.setColor(ColorRGBA.Orange);

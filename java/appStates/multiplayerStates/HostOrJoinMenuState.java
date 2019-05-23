@@ -22,13 +22,13 @@ public class HostOrJoinMenuState extends NumberOfPlayersMenuState {
 
 
     private void createJoinServerButton() {
-        Button joinServer = buttons.addChild(new Button("joinServer"));
+        Button joinServer = buttons.addChild(new Button("\n\n\n\t    Join Server"));
         joinServer.setColor(ColorRGBA.Green);
         joinServer.addClickCommands((Command<Button>) source -> switchState(GAME.joinGameMenuState));
     }
 
     private void createNewServerButton() {
-        Button createNewServer = buttons.addChild(new Button("newServer"));
+        Button createNewServer = buttons.addChild(new Button("\n\n\n\t     New Server"));
         createNewServer.setColor(ColorRGBA.Green);
         createNewServer.addClickCommands((Command<Button>) source -> switchState(GAME.multiNumberOfPlayers));
     }

@@ -3,10 +3,12 @@ package appStates.multiplayerStates;
 import appStates.singleplayerStates.BuilderSetState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import view.CameraControl;
 
 import static appStates.Game.GAME;
 import static appStates.multiplayerStates.JoinGameMenuState.client;
 import static java.lang.Integer.parseInt;
+import static model.Board.BOARD;
 
 
 public class BuilderSetStateMulti extends BuilderSetState {

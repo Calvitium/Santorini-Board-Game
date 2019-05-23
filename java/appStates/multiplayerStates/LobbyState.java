@@ -13,6 +13,7 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
 
+import static appStates.Game.players;
 import static appStates.multiplayerStates.JoinGameMenuState.client;
 import static appStates.Game.GAME;
 
@@ -46,6 +47,57 @@ public class LobbyState extends SantoriniMenuState {
         createPlayerList();
         createConnectionButtons();
         createIPTextBox();
+    }
+
+    @Override
+    protected void createReturnButton() {
+
+    }
+
+
+    private void moveToInitialization()
+    {
+        stateManager.attach(GAME.initializationState);
+        stateManager.detach(this);
+    }
+
+
+    private void updatePlayerList() {
+        String allPlayers = client.askForPlayerList();
+        if(allPlayers.equals(""))
+            returnToLastState();
+        else
+            playerList.setText(allPlayers);
+    }
+
+    private void createPlayerList(){
+        Container playerListCont = new Container();
+        playerListCont.setPreferredSize(new Vector3f(tabWidth, tabHeight * players.length / 8, 0.0f));
+        playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, tabHeight, 0);
+        playerList = playerListCont.addChild(new TextField(""));
+        playerList.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
+        updatePlayerList();
+        guiNode.attachChild(playerListCont);
+
+    }
+
+
+    private void createConnectionButtons() {
+        Button disconnect = buttons.addChild(new Button("\n\n\n\t      Disconnect"));
+        disconnect.setColor(ColorRGBA.Green);
+        disconnect.addClickCommands((Command<Button>) source -> {
+            returnToLastState();
+        });
+        if(client.isHost())
+        {
+            Button startGame = buttons.addChild(new Button("\n\n\n\t           PLAY"));
+            startGame.setColor(ColorRGBA.Green);
+            startGame.addClickCommands((Command<Button>) source -> {
+
+                if(client.askForPlayerCount() == GAME.getPlayerNumber())
+                    client.sendGameTrigger();
+            });
+        }
 
     }
 
@@ -58,55 +110,7 @@ public class LobbyState extends SantoriniMenuState {
         guiNode.attachChild(ownIPTextBox);
     }
 
-    @Override
-    protected void createReturnButton() {
 
-    }
-
-    private void moveToInitialization()
-    {
-        stateManager.attach(GAME.initializationState);
-        stateManager.detach(this);
-    }
-
-    private void createPlayerList(){
-        Container playerListCont = new Container();
-        playerListCont.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
-        playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, 3 * (windowHeight / 2 - tabHeight) + tabHeight / 6, 0);
-
-        playerList = playerListCont.addChild(new TextField(""));
-        playerList.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
-        updatePlayerList();
-        guiNode.attachChild(playerListCont);
-
-    }
-    private void updatePlayerList()
-    {
-        String allPlayers = client.askForPlayerList();
-        if(allPlayers.equals(""))
-            returnToLastState();
-        else
-            playerList.setText(allPlayers);
-    }
-    private void createConnectionButtons()
-    {
-        Button disconnect = buttons.addChild(new Button("Disconnect"));
-        disconnect.setColor(ColorRGBA.Green);
-        disconnect.addClickCommands((Command<Button>) source -> {
-            returnToLastState();
-        });
-        if(client.isHost())
-        {
-            Button startGame = buttons.addChild(new Button("Start game."));
-            startGame.setColor(ColorRGBA.Green);
-            startGame.addClickCommands((Command<Button>) source -> {
-
-                if(client.askForPlayerCount() == GAME.getPlayerNumber())
-                    client.sendGameTrigger();
-            });
-        }
-
-    }
     private void returnToLastState()
     {
         client.closeConnection(client.isHost());
