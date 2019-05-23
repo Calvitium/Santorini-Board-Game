@@ -5,6 +5,7 @@ import appStates.multiplayerStates.BuilderSetStateMulti;
 import appStates.SantoriniState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.Quaternion;
 import com.jme3.renderer.ViewPort;
 import model.*;
 import view.CameraControl;
@@ -27,8 +28,8 @@ public class InitializationState extends SantoriniState {
                 GAME.setPlayerNumber(client.askForPlayerCount());
             }*/
         setClassFields();
-        //setTeamColors();
         new Scene(assetManager, rootNode, viewPort);
+        cam.setRotation(new Quaternion());
         new CameraControl(cam, BOARD.boardCentre(), inputManager);
         if(GAME.getIsMultiMode())
             moveToBuilderSetStateMulti();

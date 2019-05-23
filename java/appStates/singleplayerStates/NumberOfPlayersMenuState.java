@@ -17,7 +17,7 @@ public class NumberOfPlayersMenuState extends SantoriniMenuState {
     public void initialize(AppStateManager stateManager, Application appImp) {
 
         super.initialize(stateManager, appImp);
-        GAME.setIsMultiMode(true);
+
     }
 
     @Override
