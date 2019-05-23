@@ -16,10 +16,8 @@ public class Game extends SimpleApplication {
     }
 
     //MultiplayerMenuStates
-    public MultiPlayerLobbyState multiPlayerLobbyState = new MultiPlayerLobbyState();
     public HostOrJoinMenuState hostOrJoinMenuState = new HostOrJoinMenuState();
     public JoinGameMenuState joinGameMenuState = new JoinGameMenuState();
-    public HostGameMenuState hostGameMenuState = new HostGameMenuState();
     public MultiNumberOfPlayers multiNumberOfPlayers = new MultiNumberOfPlayers();
     //SingleplayerMenuStates
     public MainMenuState mainMenuState = new MainMenuState();
