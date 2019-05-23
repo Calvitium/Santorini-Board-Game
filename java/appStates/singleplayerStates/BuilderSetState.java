@@ -2,7 +2,6 @@ package appStates.singleplayerStates;
 
 
 import appStates.SantoriniState;
-import appStates.singleplayerStates.InGameState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.collision.CollisionResult;
@@ -96,7 +95,7 @@ public class BuilderSetState extends SantoriniState {
         GAME.getGuiNode().attachChild(textContainer);
     }
 
-    protected void updatePhantomBuilderPosition() {
+    void updatePhantomBuilderPosition() {
         for (int column = 0; column < 5; column++)
             for (int row = 0; row < 5; row++)
                 if (isTileOccupable(column, row))
@@ -112,7 +111,7 @@ public class BuilderSetState extends SantoriniState {
                !BOARD.getTile(column, row).isCompleted() ;
     }
 
-    protected boolean cursorPointsBoardTile() {
+    boolean cursorPointsBoardTile() {
         CollisionResults results = new CollisionResults();
         Vector2f click2d = inputManager.getCursorPosition().clone();
         Vector3f click3d = cam.getWorldCoordinates(click2d, 0f).clone();

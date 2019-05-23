@@ -17,6 +17,7 @@ import java.net.SocketTimeoutException;
 
 import static appStates.Game.GAME;
 
+
 public class MultiPlayerLobbyState extends SantoriniMenuState {
     private Container insertIPTextFields;
     private TextField insertIP;
@@ -39,6 +40,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 return ((name.charAt(0)>=48 && name.charAt(0)<=57 )|| name.equals("."));
             }
         };
+
         createTextFields();
     }
 
@@ -59,22 +61,6 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
         guiNode.attachChild(buttons);
         createJoinServerButton();
         createNewServerButton();
-    }
-
-    @Override
-    public void createReturnButton() {
-        returnContainer = new Container();
-        returnContainer.setPreferredSize(new Vector3f(75, 37, 0.0f));
-        returnContainer.setLocalTranslation(windowWidth-100, windowHeight-50, 0);
-        guiNode.attachChild(returnContainer);
-
-        returnButton = returnContainer.addChild(new Button("BACK"));
-        returnButton.setColor(ColorRGBA.Red);
-        returnButton.addClickCommands((Command<Button>) source -> {
-            stateManager.cleanup();
-            stateManager.detach(GAME.multiPlayerLobbyState);
-            stateManager.attach(GAME.mainMenuState);
-        });
     }
 
     private void createJoinServerButton() {
@@ -145,8 +131,8 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
 
     );
     }
-
-    private boolean isValidAddress() {
+    private boolean isValidAddress()
+    {
         try {
             return !(InetAddress.getByName(insertedIP).isReachable(100) == false || insertedIP.equals(""));
         } catch (IOException e) {
@@ -154,6 +140,8 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
         }
         return false; // Should not get here
     }
+
+
 
     private void reshapeButtonContainer() {
         buttons.detachAllChildren();
@@ -187,7 +175,7 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
         insertIP.setColor(ColorRGBA.White);
     }
 
-
+    @Override
     public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
         Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
         newButton.setColor(ColorRGBA.Green);
@@ -202,6 +190,11 @@ public class MultiPlayerLobbyState extends SantoriniMenuState {
                 //client.startClientThread();
                 stateManager.attach(new LobbyState());
                 stateManager.detach(this);
+
+
+
+
+
         });
     }
 }
