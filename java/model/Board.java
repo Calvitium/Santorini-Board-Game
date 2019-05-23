@@ -14,7 +14,7 @@ import com.jme3.texture.Texture;
 
 import static appStates.Game.GAME;
 import static appStates.Game.appMode;
-import static appStates.InGameState.*;
+import static appStates.singleplayerStates.InGameState.*;
 import static controler.AppMode.PLAY;
 import static controler.AppMode.TEST;
 import static controler.GamePhases.BUILDING_PHASE;

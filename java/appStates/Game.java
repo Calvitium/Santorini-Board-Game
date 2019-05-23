@@ -1,12 +1,10 @@
 package appStates;
 
+import appStates.multiplayerStates.*;
+import appStates.singleplayerStates.*;
 import com.jme3.app.SimpleApplication;
 import controler.AppMode;
-import model.Board;
 import model.Player;
-
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 
 import static controler.AppMode.PLAY;
 
@@ -17,34 +15,41 @@ public class Game extends SimpleApplication {
         GAME.start();
     }
 
-    //States
-    MenuState menuState = new MenuState();
-    InitializationState initializationState = new InitializationState();
-    BuilderSetState builderSetState = new BuilderSetState();
-    MultiPlayerLobbyState multiPlayerLobbyState  = new MultiPlayerLobbyState();
-    InGameState inGameState;
+    //MultiplayerMenuStates
+    public HostOrJoinMenuState hostOrJoinMenuState = new HostOrJoinMenuState();
+    public JoinGameMenuState joinGameMenuState = new JoinGameMenuState();
+    public MultiNumberOfPlayers multiNumberOfPlayers = new MultiNumberOfPlayers();
+    //SingleplayerMenuStates
+    public MainMenuState mainMenuState = new MainMenuState();
+    public NumberOfPlayersMenuState numberOfPlayersMenuState = new NumberOfPlayersMenuState();
+    public RulesSelectionMenuState rulesSelectionMenuState = new RulesSelectionMenuState();
+    //GameplayStates
+
+     public InitializationState initializationState = new InitializationState();
+     public BuilderSetState builderSetState = new BuilderSetState();
+
+     public InGameState inGameState;
 
     //Others
     public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
-    Player[] player;
-    private int playerNumber;
+    public static Player[] players;
     private boolean isMultiMode = false;
 
 
-    @Override
-    public void simpleInitApp() {
-        stateManager.attach(menuState);
+    private Game(){
+        super();
     }
 
-    int getPlayerNumber()
-    {
-        return playerNumber;
+    @Override
+    public void simpleInitApp() {
+        stateManager.attach(mainMenuState);
     }
-    void setPlayerNumber(int n)
-    {
-        playerNumber = n;
+    public void setPlayerNumber(int n) {
+        players = new Player[n];
     }
-    public boolean getIsMultiMode(){return isMultiMode;}
-    public void setIsMultiMode(boolean isMultiMode){ this.isMultiMode = isMultiMode;}
+
+    public int getPlayerNumber() {
+        return players.length;
+    }
 }

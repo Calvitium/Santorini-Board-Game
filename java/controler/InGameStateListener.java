@@ -1,6 +1,6 @@
 package controler;
 
-import appStates.InGameState;
+import appStates.singleplayerStates.InGameState;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import model.Board;
 import model.Builder;
 import model.showTilesMode;
+
 
 
 import static appStates.BuilderSetStateMulti.clientIndex;

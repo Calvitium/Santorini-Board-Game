@@ -14,21 +14,31 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
-import com.simsilica.lemur.core.GuiComponent;
 import com.simsilica.lemur.style.BaseStyles;
 
 import static appStates.Game.GAME;
 
 public abstract class SantoriniMenuState extends AbstractAppState {
-    Node guiNode;
-    AssetManager assetManager;
-    AppStateManager stateManager;
-    InputManager inputManager;
-    float windowHeight, windowWidth;
-    float tabHeight, tabWidth;
-    Container buttons;
-    private Container myWindow;
-    Container playerNumberButtons;
+    protected Node guiNode;
+    protected AssetManager assetManager;
+    protected AppStateManager stateManager;
+    protected InputManager inputManager;
+    protected Container buttons;
+    protected Container returnContainer;
+    protected Container playerNumberButtons;
+    protected Button exitButton;
+    protected Button returnButton;
+    protected float windowHeight, windowWidth;
+    protected float tabHeight, tabWidth;
+
+    public void createButtons() {
+        buttons = new Container();
+        buttons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
+        buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
+        guiNode.attachChild(buttons);
+    }
+
+    protected abstract void createReturnButton();
 
     @Override
     public void initialize(AppStateManager stateManager, Application application) {
@@ -44,7 +54,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         tabHeight = windowHeight / 3;
         createBackground();
         createButtons();
-        createPlayerNumberButtons();
+        createReturnButton();
     }
 
     @Override
@@ -69,32 +79,10 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         guiNode.attachChild(myWindow);
         myWindow.setLocalTranslation(0f, windowHeight, 0);
     }
-
-    public abstract void createButtons();
-    public void createPlayerNumberButtons() {
-        playerNumberButtons = new Container();
-        playerNumberButtons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        playerNumberButtons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-
-        createPlayerButton(2, playerNumberButtons);
-        createPlayerButton(3, playerNumberButtons);
-        createPlayerButton(4, playerNumberButtons);
-
-
-    }
-
-    public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
-        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
-        newButton.setColor(ColorRGBA.Green);
-        newButton.addClickCommands(new Command<Button>() {
-            @Override
-            public void execute(Button source) {
-                GAME.setPlayerNumber(numberOfPlayers);
-                stateManager.cleanup();
-                stateManager.attach(GAME.initializationState);
-                stateManager.detach(GAME.menuState);
-
-            }
-        });
+  
+    protected void switchState(SantoriniMenuState menuState) {
+        stateManager.cleanup();
+        stateManager.detach(this);
+        stateManager.attach(menuState);
     }
 }

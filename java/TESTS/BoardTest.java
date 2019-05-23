@@ -10,7 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static appStates.InGameState.roundPhase;
+import static appStates.singleplayerStates.InGameState.roundPhase;
 import static controler.AppMode.*;
 import static controler.GamePhases.BUILDING_PHASE;
 import static model.Board.getTestInstance;
