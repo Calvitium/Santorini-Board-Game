@@ -4,6 +4,7 @@ package model;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.scene.Node;
 import gods.BasicRules;
 import gods.Pan;
@@ -89,12 +90,14 @@ public class Player {
     }
 
 /** Builds a floor on the selected tile (redirects arguments to the rules.build(....) function) */
-    public void orderBuild(Ray ray, CollisionResults results, Builder builder) {
+    public Vector2f orderBuild(Ray ray, CollisionResults results, Builder builder) {
         if(builder.getBuilderNode().equals(male.getBuilderNode()))
-            rules.build(ray, results, male);
+            return rules.build(ray, results, male);
         else if(builder.getBuilderNode().equals(female.getBuilderNode()))
-            rules.build(ray, results, female);
+            return rules.build(ray, results, female);
+        return null;
     }
+
 
     public boolean isWinAccomplished(Builder builder) {
         return rules.isWinAccomplished(builder);

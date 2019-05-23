@@ -34,6 +34,7 @@ public class Game extends SimpleApplication {
     public static AppMode appMode = PLAY;
     public static final Game GAME = new Game();
     public static Player[] players;
+    private boolean isMultiMode = false;
 
 
     private Game(){
@@ -44,7 +45,6 @@ public class Game extends SimpleApplication {
     public void simpleInitApp() {
         stateManager.attach(mainMenuState);
     }
-
     public void setPlayerNumber(int n) {
         players = new Player[n];
     }
@@ -52,5 +52,4 @@ public class Game extends SimpleApplication {
     public int getPlayerNumber() {
         return players.length;
     }
-
 }

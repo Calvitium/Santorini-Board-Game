@@ -57,6 +57,50 @@ public class Client {
         }
 
     }
+    public int askForIndex()
+    {
+        try{
+            output.writeUTF("GiveMeAnIndex");
+            return input.readInt();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    public String askForUpdates()
+    {
+        try {
+            output.writeUTF("WereUpdatesMade");
+            String updates = input.readUTF();
+            if(updates.equals("Yes"))
+            {
+                output.writeUTF("SendTheUpdates");
+                return input.readUTF();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    public void sendUpdates(String buffer)
+    {
+        try {
+            output.writeUTF("Updates");
+            output.writeUTF(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void sendInitOrder()
+    {
+        try {
+            output.writeUTF("InitOrder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean checkIfGameStarted()
     {
         try {
@@ -70,7 +114,7 @@ public class Client {
     public void closeConnection(boolean isHost)
     {
         try {
-            output.writeUTF("ByeBye");
+            output.writeUTF("CloseClient");
             if(isHost == true)
                 output.writeUTF("CloseServer");
             output.close();
@@ -105,6 +149,18 @@ public class Client {
             e.printStackTrace();
         }
         return received;
+    }
+    public boolean isOutputShut()
+    {
+        return clientSocket.isOutputShutdown();
+    }
+    public void setOutputShut()
+    {
+        try {
+            clientSocket.shutdownOutput();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
