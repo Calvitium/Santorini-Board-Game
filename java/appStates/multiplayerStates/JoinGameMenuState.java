@@ -69,7 +69,7 @@ public class JoinGameMenuState extends SantoriniMenuState {
     }
 
     private void createConnectButton() {
-        Button connect = buttons.addChild(new Button("connect"));
+        Button connect = buttons.addChild(new Button("\n\n\n             Connect to the Server"));
         connect.setColor(ColorRGBA.Green);
         connect.addClickCommands((Command<Button>) source -> {
                     try {
@@ -91,7 +91,7 @@ public class JoinGameMenuState extends SantoriniMenuState {
     }
 
     private void createClearButton() {
-        Button clear = buttons.addChild(new Button("clear"));
+        Button clear = buttons.addChild(new Button("\n\n\n\t    Clear IP Field"));
         clear.setColor(ColorRGBA.Green);
 
         clear.addClickCommands((Command<Button>) source -> {

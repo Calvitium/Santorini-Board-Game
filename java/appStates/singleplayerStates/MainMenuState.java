@@ -30,8 +30,8 @@ public class MainMenuState extends SantoriniMenuState {
     @Override
     public void createButtons() {
        super.createButtons();
-        Button hotSeat = buttons.addChild(new Button("Hot seat"));
-        Button online = buttons.addChild(new Button("Online"));
+        Button hotSeat = buttons.addChild(new Button("\n\n\n\t       Hot seat"));
+        Button online = buttons.addChild(new Button("\n\n\n\t        Online"));
         hotSeat.setColor(ColorRGBA.Green);
         online.setColor(ColorRGBA.Green);
         hotSeat.addClickCommands((Command<Button>) source -> switchState(GAME.numberOfPlayersMenuState));

@@ -16,7 +16,7 @@ public class MultiNumberOfPlayers extends NumberOfPlayersMenuState {
 
     @Override
     public void createPlayerButton(int numberOfPlayers, Container playerNumberButtons) {
-        Button newButton = playerNumberButtons.addChild(new Button(numberOfPlayers + " players"));
+        Button newButton = playerNumberButtons.addChild(new Button("\n\n\t       " + numberOfPlayers + " players"));
         newButton.setColor(ColorRGBA.Green);
         newButton.addClickCommands((Command<Button>) source -> {
             GAME.setPlayerNumber(numberOfPlayers);

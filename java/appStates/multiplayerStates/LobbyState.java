@@ -53,10 +53,13 @@ public class LobbyState extends SantoriniMenuState {
     }
     @Override
     public void createButtons() {
-        buttons = new Container();
-        buttons.setPreferredSize(new Vector3f(tabWidth, tabHeight, 0.0f));
-        buttons.setLocalTranslation(windowWidth / 2 - tabWidth / 2, windowHeight / 2 + tabHeight / 2, 0);
-        guiNode.attachChild(buttons);
+
+
+
+        super.createButtons();
+        createPlayerList();
+        createConnectionButtons();
+        createIPTextBox();
 
     }
 
@@ -65,16 +68,28 @@ public class LobbyState extends SantoriniMenuState {
 
     }
 
+
     private void moveToInitialization()
     {
         stateManager.detach(this);
         stateManager.attach(GAME.initializationState);
     }
 
+
+    private void updatePlayerList() {
+        String allPlayers = client.askForPlayerList();
+        if(allPlayers.equals(""))
+            returnToLastState();
+        else
+            playerList.setText(allPlayers);
+    }
+
     private void createPlayerList(){
+
         playerListCont = new Container();
         playerListCont.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
         playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, 3 * (windowHeight / 2 - tabHeight) + tabHeight / 6, 0);
+
 
         playerList = playerListCont.addChild(new TextField(""));
         playerList.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
@@ -82,6 +97,7 @@ public class LobbyState extends SantoriniMenuState {
         guiNode.attachChild(playerListCont);
 
     }
+
     private void updatePlayerList()
     {
         allPlayers = client.askForPlayerList();
@@ -91,15 +107,18 @@ public class LobbyState extends SantoriniMenuState {
             playerList.setText(allPlayers);
     }
     private void createConnectionButtons()
+
+    
     {
         Button disconnect = buttons.addChild(new Button("Disconnect"));
+
         disconnect.setColor(ColorRGBA.Green);
         disconnect.addClickCommands((Command<Button>) source -> {
             returnToLastState();
         });
         if(client.isHost())
         {
-            Button startGame = buttons.addChild(new Button("Start game."));
+            Button startGame = buttons.addChild(new Button("\n\n\n\t           PLAY"));
             startGame.setColor(ColorRGBA.Green);
             startGame.addClickCommands((Command<Button>) source -> {
 
@@ -109,6 +128,17 @@ public class LobbyState extends SantoriniMenuState {
         }
 
     }
+
+    private void createIPTextBox() {
+        Container ownIPTextBox = new Container();
+        ownIPTextBox.setPreferredSize(new Vector3f(120, 50, 0.0f));
+        ownIPTextBox.setLocalTranslation(windowWidth - 300, windowHeight - 50,  0);
+        ownIP = ownIPTextBox.addChild(new TextField("Your IP address: \n" + Game.IP_ADDRESS));
+        ownIP.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
+        guiNode.attachChild(ownIPTextBox);
+    }
+
+
     private void returnToLastState()
     {
         client.closeConnection(client.isHost());

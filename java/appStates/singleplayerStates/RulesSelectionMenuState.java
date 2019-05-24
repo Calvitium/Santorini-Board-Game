@@ -27,12 +27,12 @@ public class RulesSelectionMenuState extends SantoriniMenuState {
     @Override
     public void createButtons() {
         super.createButtons();
-        Button basicRulesMode = buttons.addChild(new Button("Basic\nrules"));
-        Button randomGods = buttons.addChild(new Button("Random \nrules"));
-        Button pickGods = buttons.addChild(new Button("Chosen \nrules"));
+        Button basicRulesMode = buttons.addChild(new Button("\n\n\t       Basic Rules"));
+        Button randomGods = buttons.addChild(new Button("\n\n\t    Random Rules"));
+        Button pickGods = buttons.addChild(new Button("\n\n\t  Preferred Rules"));
         basicRulesMode.setColor(ColorRGBA.Green);
-        randomGods.setColor(ColorRGBA.Blue);
-        pickGods.setColor(ColorRGBA.Red);
+        randomGods.setColor(ColorRGBA.Green);
+        pickGods.setColor(ColorRGBA.Green);
 
         basicRulesMode.addClickCommands((Command<Button>) source -> setBasicRules());
         randomGods.addClickCommands((Command<Button>) source -> setRandomRules());
