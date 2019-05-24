@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Client {
     private Socket clientSocket;
@@ -78,7 +79,16 @@ public class Client {
                 output.writeUTF("SendTheUpdates");
                 return input.readUTF();
             }
-        } catch (IOException e) {
+        }catch (SocketException e) {
+            try {
+                clientSocket.close();
+                System.exit(1);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return "";
@@ -106,7 +116,17 @@ public class Client {
         try {
             output.writeUTF("HasTheGameStarted");
             return input.readBoolean();
-        } catch (IOException e) {
+        }
+        catch (SocketException e) {
+            try {
+                input.close();
+                clientSocket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -137,6 +157,24 @@ public class Client {
         }
         return -1;
     }
+    public int askForPlayerLimit(){
+        try {
+            output.writeUTF("PlayerLimit");
+            return input.readInt();
+        }
+        catch (SocketException e) {
+            try {
+                clientSocket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
     public String askForPlayerList() {
         String received = "There are no players, sth wrong.";
         try {
@@ -149,18 +187,6 @@ public class Client {
             e.printStackTrace();
         }
         return received;
-    }
-    public boolean isOutputShut()
-    {
-        return clientSocket.isOutputShutdown();
-    }
-    public void setOutputShut()
-    {
-        try {
-            clientSocket.shutdownOutput();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

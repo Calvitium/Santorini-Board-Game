@@ -7,6 +7,8 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Node;
 import gods.BasicRules;
+import gods.Pan;
+
 import static appStates.Game.GAME;
 import static appStates.Game.appMode;
 import static controler.AppMode.PLAY;

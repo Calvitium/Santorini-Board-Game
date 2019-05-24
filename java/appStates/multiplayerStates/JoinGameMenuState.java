@@ -65,10 +65,6 @@ public class JoinGameMenuState extends SantoriniMenuState {
 
     @Override
     public void update(float tpf) {
-        if (insertedIP.length() == 15) {
-            System.out.print(insertedIP);
-            System.exit(15);
-        }
         insertIP.setText(insertedIP);
     }
 

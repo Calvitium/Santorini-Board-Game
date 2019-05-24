@@ -35,7 +35,10 @@ public class MainMenuState extends SantoriniMenuState {
         hotSeat.setColor(ColorRGBA.Green);
         online.setColor(ColorRGBA.Green);
         hotSeat.addClickCommands((Command<Button>) source -> switchState(GAME.numberOfPlayersMenuState));
-        online.addClickCommands((Command<Button>) source -> switchState(GAME.hostOrJoinMenuState));
+        online.addClickCommands((Command<Button>) source -> {
+            GAME.setIsMultiMode(true);
+            switchState(GAME.hostOrJoinMenuState);
+        });
     }
 
     @Override

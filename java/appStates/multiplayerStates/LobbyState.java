@@ -1,6 +1,5 @@
 package appStates.multiplayerStates;
 
-import appStates.Game;
 import appStates.SantoriniMenuState;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -12,6 +11,7 @@ import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.TextField;
+import model.Player;
 
 import static appStates.Game.players;
 import static appStates.multiplayerStates.JoinGameMenuState.client;
@@ -22,9 +22,21 @@ import static appStates.Game.GAME;
 
 public class LobbyState extends SantoriniMenuState {
 
+    private Container playerListCont;
     private TextField playerList;
-    private TextField ownIP;
+    private String allPlayers;
 
+
+    @Override
+    public void initialize(AppStateManager stateManager, Application appImp) {
+        super.initialize(stateManager, appImp);
+        createPlayerList();
+        createConnectionButtons();
+        if(!client.isHost()) {
+            GAME.setPlayerNumber(client.askForPlayerLimit());
+            createPlayerArray();
+        }
+    }
 
     @Override
     public void cleanup() {
@@ -34,19 +46,21 @@ public class LobbyState extends SantoriniMenuState {
 
     @Override
     public void update(float tpf) {
-        updatePlayerList();
+
         if(client.checkIfGameStarted() == true)
-        {
-            GAME.setIsMultiMode(true);
             moveToInitialization();
-        }
+        updatePlayerList();
     }
     @Override
     public void createButtons() {
+
+
+
         super.createButtons();
         createPlayerList();
         createConnectionButtons();
         createIPTextBox();
+
     }
 
     @Override
@@ -57,8 +71,8 @@ public class LobbyState extends SantoriniMenuState {
 
     private void moveToInitialization()
     {
-        stateManager.attach(GAME.initializationState);
         stateManager.detach(this);
+        stateManager.attach(GAME.initializationState);
     }
 
 
@@ -71,9 +85,12 @@ public class LobbyState extends SantoriniMenuState {
     }
 
     private void createPlayerList(){
-        Container playerListCont = new Container();
-        playerListCont.setPreferredSize(new Vector3f(tabWidth, tabHeight * players.length / 8, 0.0f));
-        playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, tabHeight, 0);
+
+        playerListCont = new Container();
+        playerListCont.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
+        playerListCont.setLocalTranslation(windowWidth / 2 - tabWidth / 2, 3 * (windowHeight / 2 - tabHeight) + tabHeight / 6, 0);
+
+
         playerList = playerListCont.addChild(new TextField(""));
         playerList.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
         updatePlayerList();
@@ -81,9 +98,20 @@ public class LobbyState extends SantoriniMenuState {
 
     }
 
+    private void updatePlayerList()
+    {
+        allPlayers = client.askForPlayerList();
+        if(allPlayers.equals(""))
+            returnToLastState();
+        else
+            playerList.setText(allPlayers);
+    }
+    private void createConnectionButtons()
 
-    private void createConnectionButtons() {
-        Button disconnect = buttons.addChild(new Button("\n\n\n\t      Disconnect"));
+    
+    {
+        Button disconnect = buttons.addChild(new Button("Disconnect"));
+
         disconnect.setColor(ColorRGBA.Green);
         disconnect.addClickCommands((Command<Button>) source -> {
             returnToLastState();

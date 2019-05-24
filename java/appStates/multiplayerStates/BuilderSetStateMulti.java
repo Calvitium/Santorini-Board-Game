@@ -48,6 +48,8 @@ public class BuilderSetStateMulti extends BuilderSetState {
 
     }
     private void executeUpdates(String updates) {
+        if(buildersCount==0)
+            players = GAME.players; // update players
         if (updates.charAt(0) == 'P') {
             char sex = updates.charAt(1);
             int column = parseInt(updates.substring(2, 3));

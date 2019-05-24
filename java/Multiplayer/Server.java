@@ -162,11 +162,14 @@ public class Server extends  Thread{
                         case "PlayerCount": // Client asks for the player count
                             dos.writeInt(clientNumber);
                             break;
+                        case "PlayerLimit":
+                            dos.writeInt(playerLimit);
+                            break;
                         case "I need player list": // Client asks for the player list
                             String toSend = "";
                             for(int i=0;i<clientNumber;i++)
                             {
-                                toSend += getActiveSockets().get(i) + "\n";
+                                toSend += getActiveSockets().get(i).socket.getInetAddress() + "\n";
                             }
                             dos.writeUTF(toSend);
                             break;
@@ -177,6 +180,8 @@ public class Server extends  Thread{
                     e.printStackTrace();
                     activeSockets.remove(this);
                     clientNumber--;
+                    if(isInGame == true)
+                        System.exit(1);
                     return;
 
                 }

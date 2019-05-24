@@ -15,7 +15,9 @@ public class NumberOfPlayersMenuState extends SantoriniMenuState {
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
+
         super.initialize(stateManager, appImp);
+
     }
 
     @Override
@@ -45,7 +47,10 @@ public class NumberOfPlayersMenuState extends SantoriniMenuState {
 
         returnButton = returnContainer.addChild(new Button("BACK"));
         returnButton.setColor(ColorRGBA.Red);
-        returnButton.addClickCommands((Command<Button>) source -> switchState(GAME.mainMenuState));
+        returnButton.addClickCommands((Command<Button>) source ->{
+            GAME.setIsMultiMode(false);
+            switchState(GAME.mainMenuState);
+        });
     }
 
 

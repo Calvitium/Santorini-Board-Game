@@ -15,8 +15,10 @@ import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 import com.simsilica.lemur.style.BaseStyles;
+import model.Player;
 
 import static appStates.Game.GAME;
+import static appStates.Game.players;
 
 public abstract class SantoriniMenuState extends AbstractAppState {
     protected Node guiNode;
@@ -31,6 +33,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
     protected Button returnButton;
     protected float windowHeight, windowWidth;
     protected float tabHeight, tabWidth;
+
 
     public void createButtons() {
         buttons = new Container();
@@ -56,6 +59,7 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         createBackground();
         createButtons();
         createReturnButton();
+
     }
 
     @Override
@@ -85,5 +89,19 @@ public abstract class SantoriniMenuState extends AbstractAppState {
         stateManager.cleanup();
         stateManager.detach(this);
         stateManager.attach(menuState);
+    }
+    protected void createPlayerArray()
+    {
+        GAME.players = GAME.players = new Player[GAME.getPlayerNumber()];
+        String[] teamColors = {"Blue", "Red", "Green"};
+        if(players.length < 4)
+            for(int i = 0; i<players.length; i++)
+                players[i] = new Player(teamColors[i]);
+        else if(players.length == 4) {
+            players[0] = new Player("Blue");
+            players[1] = new Player("Red");
+            players[2] = new Player(players[0]);
+            players[3] = new Player(players[1]);
+        }
     }
 }
