@@ -25,13 +25,13 @@ public class LobbyState extends SantoriniMenuState {
     private Container playerListCont;
     private TextField playerList;
     private String allPlayers;
+    private TextField ownIP;
 
 
     @Override
     public void initialize(AppStateManager stateManager, Application appImp) {
         super.initialize(stateManager, appImp);
-        createPlayerList();
-        createConnectionButtons();
+        createButtons();
         if(!client.isHost()) {
             GAME.setPlayerNumber(client.askForPlayerLimit());
             createPlayerArray();
@@ -98,7 +98,7 @@ public class LobbyState extends SantoriniMenuState {
 
     }
 
-    private void updatePlayerList()
+    private void updatePlayer()
     {
         allPlayers = client.askForPlayerList();
         if(allPlayers.equals(""))
@@ -133,7 +133,7 @@ public class LobbyState extends SantoriniMenuState {
         Container ownIPTextBox = new Container();
         ownIPTextBox.setPreferredSize(new Vector3f(120, 50, 0.0f));
         ownIPTextBox.setLocalTranslation(windowWidth - 300, windowHeight - 50,  0);
-        ownIP = ownIPTextBox.addChild(new TextField("Your IP address: \n" + Game.IP_ADDRESS));
+        ownIP = ownIPTextBox.addChild(new TextField("Your IP address: \n" + GAME.IP_ADDRESS));
         ownIP.setPreferredSize(new Vector3f(tabWidth / 2, tabHeight / 6, 0.0f));
         guiNode.attachChild(ownIPTextBox);
     }
