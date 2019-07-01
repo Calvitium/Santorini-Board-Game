@@ -1,0 +1,75 @@
+<scene previous_export_time="0" formatVersion="1.0.1" export_time="1559424319.8762014" exported_by="Przemek" >
+  <nodes >
+    <node name="Cube.002" >
+      <position x="-4.879997" z="-13.480011" y="-17.909998" />
+      <rotation qw="1.000000" qz="-0.000000" qy="0.000000" qx="0.000000" />
+      <scale x="8.000000" z="8.000000" y="8.000000" />
+      <user_data value='&lt;bpy id prop: owner="OBCube.002", name="cycles", address=0x000001E5F5AB93D8&gt;' type="IDPropertyGroup" name="cycles" />
+      <user_data value='&lt;bpy id prop: owner="OBCube.002", name="cycles_visibility", address=0x000001E5F5AB9468&gt;' type="IDPropertyGroup" name="cycles_visibility" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity friction_z="1.0" damping_rot="0.10000000149011612" lock_trans_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" name="Cube.002" lock_rot_z="False" ghost="False" inertia_tensor="0.4000000059604645" meshFile="Cube.002.mesh" lock_rot_y="False" anisotropic_friction="False" velocity_max="0.0" lock_rot_x="False" actor="False" friction_x="1.0" mass="1.0" lock_trans_y="False" mass_radius="1.0" physics_type="STATIC" lock_trans_x="False" friction_y="1.0" />
+    </node>
+    <node name="Sun" >
+      <position x="-11.198210" z="10.635101" y="26.992010" />
+      <rotation qw="0.996796" qz="0.040042" qy="-0.038049" qx="0.057849" />
+      <scale x="1.000000" z="1.000000" y="1.000000" />
+      <user_data value='&lt;bpy id prop: owner="OBSun", name="cycles_visibility", address=0x000001E5F5AB84A8&gt;' type="IDPropertyGroup" name="cycles_visibility" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <light powerScale="1.0" type="directional" name="Sun" >
+        <position x="-11.198210" z="10.635101" y="26.992010" />
+        <lightAttenuation range="5000" quadratic="0.0" linear="0.04" constant="1.0" />
+        <direction x="-0.075" z="0.118" y="-0.99" />
+        <colourDiffuse b="1.0" g="1.0" r="1.0" />
+        <colourSpecular b="1.0" g="1.0" r="1.0" />
+      </light>
+    </node>
+    <node name="Lamp" >
+      <position x="4.076245" z="-1.005454" y="1.163552" />
+      <rotation qw="-0.255602" qz="-0.942827" qy="0.193067" qx="0.092035" />
+      <scale x="1.000670" z="1.077404" y="1.130426" />
+      <user_data value='&lt;bpy id prop: owner="OBLamp", name="cycles_visibility", address=0x000001E5F5AB7E78&gt;' type="IDPropertyGroup" name="cycles_visibility" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <light powerScale="1.0" type="point" name="Lamp" shadow="true" >
+        <position x="4.076245" z="-1.005454" y="1.163552" />
+        <lightAttenuation range="5000" quadratic="0.0" linear="0.03333335240683057" constant="1.0" />
+        <colourDiffuse b="1.0" g="1.0" r="1.0" />
+        <colourSpecular b="1.0" g="1.0" r="1.0" />
+        <colourShadow b="1.0" g="1.0" r="1.0" />
+      </light>
+    </node>
+    <node name="Camera" >
+      <position x="7.481132" z="6.507640" y="1.835788" />
+      <rotation qw="0.912886" qz="-0.325779" qy="0.201831" qx="-0.140613" />
+      <scale x="1.000000" z="1.163083" y="1.042707" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <camera name="Camera" fov="0.5033799435163735" projectionType="perspective" >
+        <clipping farPlaneDist="100.0" far="100.0" near="0.10000000149011612" nearPlaneDist="0.10000000149011612" />
+      </camera>
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="C:\Users\Przemek\Desktop\Santorini\src\main\assets\Scenes\Material.003.material" />
+    </item>
+    <item type="material" >
+      <file name="C:\Users\Przemek\Desktop\Santorini\src\main\assets\Scenes\Material.001.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourBackground b="0.05087608844041824" g="0.05087608844041824" r="0.05087608844041824" />
+    <colourAmbient b="0.0" g="0.0" r="0.0" />
+    <colourDiffuse b="0.05087608844041824" g="0.05087608844041824" r="0.05087608844041824" />
+  </environment>
+</scene>
